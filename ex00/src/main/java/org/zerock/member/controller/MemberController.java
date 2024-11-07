@@ -1,16 +1,19 @@
 package org.zerock.member.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.member.service.MemberService;
 import org.zerock.member.vo.LoginVO;
+import org.zerock.util.page.PageObject;
 
 import lombok.extern.log4j.Log4j;
 
@@ -84,6 +87,58 @@ public class MemberController {
 		rttr.addFlashAttribute("msg", "회원가입 완료");
 		
 		return "redirect:/main/main.do";
+	}
+	
+	@GetMapping("/list.do")
+	public String list(Model model, HttpServletRequest request) {
+		
+		log.info("list() =======");
+		
+		// 페이지 처리를 위한 객체 생성
+		PageObject pageObject = PageObject.getInstance(request);
+		// 1.
+		//request.setAttribute("list", service.list());
+		// 2. 처리된 데이터를 model 저장해서 넘긴다.
+		// model에 담으면 request에 자동으로 담긴다.
+		model.addAttribute("list", service.list(pageObject));
+		model.addAttribute("pageObject", pageObject);
+		
+		return "member/list";
+	}
+	
+	@GetMapping("/view.do")
+	public String view(Model model, String id) {
+		
+		log.info("view() ======");
+		model.addAttribute("vo", service.view(id));
+		
+		return "member/view";
+	}
+	
+	@GetMapping("/changeStatus.do")
+	public String changeStatus (Model model, HttpServletRequest request,LoginVO vo,
+			RedirectAttributes rttr) throws Exception {
+		
+		PageObject pageObject = PageObject.getInstance(request);
+		
+		model.addAttribute("vo", service.changeStatus(vo));
+		
+		rttr.addFlashAttribute("msg", "회원 상태 변경 성공");
+		
+		return "redirect:list.do?" + pageObject.getPageQuery();
+	}
+	
+	@GetMapping("/changeGradeNo.do")
+	public String changeGradeNo (Model model, HttpServletRequest request,LoginVO vo,
+			RedirectAttributes rttr) throws Exception {
+		
+		PageObject pageObject = PageObject.getInstance(request);
+		
+		model.addAttribute("vo", service.changeGradeNo(vo));
+		
+		rttr.addFlashAttribute("msg", "회원 등급 변경 성공");
+		
+		return "redirect:list.do?" + pageObject.getPageQuery();
 	}
 }
 
