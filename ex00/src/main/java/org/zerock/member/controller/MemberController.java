@@ -107,9 +107,15 @@ public class MemberController {
 	}
 	
 	@GetMapping("/view.do")
-	public String view(Model model, String id) {
+	public String view(Model model, String id, HttpSession session) {
 		
 		log.info("view() ======");
+		
+		if (id == null) {
+			LoginVO loginVO = (LoginVO) session.getAttribute("login");
+			id = loginVO.getId();
+		}
+		
 		model.addAttribute("vo", service.view(id));
 		
 		return "member/view";
