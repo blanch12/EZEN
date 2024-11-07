@@ -4,163 +4,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link>
+<link rel="stylesheet" href="/resources/styles/loginForm.css">
 <title>로그인 폼</title>
 
 <style type="text/css">
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
-@font-face {
-	font-family: 'Chosunilbo_myungjo';
-	src:
-		url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Chosunilbo_myungjo.woff')
-		format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
-
-body {
-	font-family: 'Chosunilbo_myungjo';
-	overflow-x: hidden;
-}
-
-ul, li, ol {
-	list-style: none;
-}
-
-a {
-	text-decoration: none;
-	color: inherit;
-}
-
 .container {
 	width: 100%;
-	height: 100vh;
+	height: 80vh;
 	position: relative;
-}
-
-.login_wrap {
-	width: 60%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	position: absolute;
-	top: 40%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-}
-
-.loginForm {
-	width: 450px;
-	height: 330px;
-	margin: 0 auto;
-}
-
-.tab-buttons {
-	display: flex;
-	margin-bottom: 15px;
-}
-
-.tab-buttons button, .tip {
-	flex: 1;
-	padding: 10px;
-	cursor: pointer;
-	border: none;
-	background-color: #fff;
-	font-weight: bold;
-	transition: background-color 0.3s;
-}
-
-.tab-buttons .active {
-	border-bottom: 1px solid #ccc;
-	color: #000;
-}
-
-.tab-content {
-	display: none;
-}
-
-.tab-content.active {
-	display: block;
-}
-
-.form-group {
-	margin-bottom: 15px;
-}
-
-.form-group label {
-	display: block;
-	margin-bottom: 5px;
-	font-size: 0.9em;
-}
-
-.form-group input {
-	width: 100%;
-	padding: 8px;
-	box-sizing: border-box;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-}
-
-select#gender {
-	width: 450px;
-	height: 33px;
-	border: 1px solid #ccc;
-}
-
-button[type='submit'] {
-	width: 100%;
-	padding: 10px;
-	border: none;
-	border-radius: 4px;
-	cursor: pointer;
-}
-
-.register_btn {
-	background-color: #a48374;
-	color: #fff;
-}
-
-.or {
-	width: 100%;
-	height: 70px;
-	text-align: center;
-	gap: 10px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-wrap: nowrap;
-}
-
-.line {
-	width: 100%;
-}
-
-.kakao_login {
-	background-color: #fee500;
-}
-
-.naver_login {
-	background-color: #03c75a;
-	color: #fff;
-}
-
-.login {
-	background-color: #a48374;
-	color: #fff;
-}
-
-.login_btn {
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-}
-
-.login_btn button {
-	gap: 10px;
 }
 </style>
 
@@ -194,7 +46,9 @@ button[type='submit'] {
 							<input type="password" name="pw" id="pw" placeholder="password 입력" required />
 						</div>
 
-						<button type="submit" class="login">로그인</button>
+						<button type="submit" class="loginForm_btn">로그인</button>
+
+
 					</form>
 				</div>
 
@@ -236,29 +90,18 @@ button[type='submit'] {
 						<button type="submit" class="register_btn">회원가입</button>
 					</form>
 				</div>
+
+			</div>
+			<div class="login_bg">
+
+				<img alt="로그인 이미지" src="/resources/image/login/loginbg.png">
+
+				<a href="/main/main.do ">
+					<img alt="로고 이미지" src="/resources/image/logo_light.svg">
+				</a>
 			</div>
 		</div>
 	</div>
-	<script>
-		function showTab(tabId) {
-			// 모든 탭 콘텐츠 숨기기
-			document.querySelectorAll('.tab-content').forEach(
-					function(content) {
-						content.classList.remove('active');
-					});
 
-			// 모든 탭 버튼 비활성화
-			document.querySelectorAll('.tab-buttons button').forEach(
-					function(button) {
-						button.classList.remove('active');
-					});
-
-			// 선택한 탭 콘텐츠 및 버튼 활성화
-			document.getElementById(tabId).classList.add('active');
-			document
-					.querySelector(`.tab-buttons button[onclick="showTab('${tabId}')"]`).classList
-					.add('active');
-		}
-	</script>
 </body>
 </html>

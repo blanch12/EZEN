@@ -1,0 +1,163 @@
+@charset "UTF-8";
+
+.header {
+	border-bottom: 1px solid #999; 
+}
+
+
+.login_wrap {
+	width: 50%;
+	display: flex;
+	align-items: center;
+	position: absolute;
+	top: 30%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	justify-content: space-between;
+	z-index: 3;
+}
+
+.loginForm {
+	width: 450px;
+	height: 330px;
+
+}
+
+.login_bg {
+	width: 450px;
+	height: 350px;
+	position: relative;
+
+}
+
+
+
+.login_bg > a {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 200px;
+}
+
+
+.login_bg img {
+	width: 100%;
+	height: 100%;
+	object-fit :cover;
+	display: block;
+	
+}
+
+
+.tab-buttons {
+	display: flex;
+	margin-bottom: 15px;
+}
+
+.tab-buttons button, .tip {
+	flex: 1;
+	padding: 10px;
+	cursor: pointer;
+	border: none;
+	background-color: #fff;
+	font-weight: bold;
+	transition: background-color 0.3s;
+}
+
+.tab-buttons .active {
+	border-bottom: 1px solid #ccc;
+	color: #000;
+}
+
+.tab-content {
+	display: none;
+}
+
+.tab-content.active {
+	display: block;
+}
+
+.form-group {
+	margin-bottom: 15px;
+}
+
+.form-group label {
+	display: block;
+	margin-bottom: 5px;
+	font-size: 0.9em;
+}
+
+.form-group input {
+	width: 100%;
+	padding: 8px;
+	box-sizing: border-box;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+select#gender {
+	width: 450px;
+	height: 33px;
+	border: 1px solid #ccc;
+}
+
+button[type='submit'] {
+	width: 100%;
+	padding: 10px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.register_btn {
+	background-color: #a48374;
+	color: #fff;
+}
+
+.or {
+	width: 100%;
+	height: 70px;
+	text-align: center;
+	gap: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: nowrap;
+}
+
+.line {
+	width: 100%;
+}
+
+.kakao_login {
+	background-color: #fee500;
+}
+
+.naver_login {
+	background-color: #03c75a;
+	color: #fff;
+}
+
+.loginForm_btn{
+	background-color: #a48374;
+	color: #fff;
+	
+	
+}
+
+.login_btn {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.login_btn button {
+	gap: 10px;
+}
+
+.footer {
+		position: fixed;
+    left: 0;
+    bottom: 0; 
+}

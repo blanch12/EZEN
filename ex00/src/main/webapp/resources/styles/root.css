@@ -1,0 +1,22 @@
+
+:root {
+  --light-gray: #F5F5F5;
+  --gray: #EAEAEA;
+  --dark-gray: #222222;
+  --white: #FFFFFF;
+  --white50: #FFFFFF50;
+  --black: #0A0A0A;
+  --id-color: #A48374;
+
+  --font-size-xxxl: 2.6rem;
+  --font-size-xxl: 2.2rem;
+  --font-size-xl: 2rem;
+  --font-size-lg: 1.8rem;
+  --font-size-md: 1.6rem;
+  --font-size-sm: 1.4rem;
+  --font-size-xs: 1.2rem;
+
+  --text-bold: 700;
+  --text-medium: 500;
+  --text-light: 200;
+}

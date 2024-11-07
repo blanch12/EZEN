@@ -1,7 +1,5 @@
 package org.zerock.member.vo;
 
-import java.util.Date;
-
 import lombok.Data;
 
 @Data
@@ -15,11 +13,8 @@ public class LoginVO {
 	private String gender;
 	private String tel;
 	private String email;
-	private Date birth;
-	private Date regDate;
-	private Date conDate;
-	private String status;
-	private Long newMsgCnt;
+	private String birth;
+	private Long newMsgCont;
 	private Integer gradeNo;
 	// grade table
 	private String gradeName;

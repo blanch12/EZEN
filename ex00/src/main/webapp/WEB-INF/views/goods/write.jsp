@@ -6,6 +6,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/resources/styles/reset.css">
+<link rel="stylesheet" href="/resources/styles/common.css">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <title>상품 등록</title>
 <script type="text/javascript">
 $(function(){

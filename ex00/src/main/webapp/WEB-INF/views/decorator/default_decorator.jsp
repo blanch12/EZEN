@@ -1,275 +1,196 @@
-<!-- sitemesh 사용을 위한 설정 파일 -->
-<!-- 작성자 : 이현진 -->
-<!-- 작성일 : 2017-01-12 -->
-<!-- 최종수정일 : 2024-09-05 -->
-
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="decorator"
-	uri="http://www.opensymphony.com/sitemesh/decorator"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<!-- 개발자 작성한 title을 가져 다 사용 -->
-	<title>
-		쇼핑몰:<decorator:title />
-	</title>
-  <!-- Bootstrap 4 + jquery 라이브러리 등록 - CDN 방식 -->
-  <!-- 여기에 사용할 라이브러리들을 한번에 적용할 수 있습니다. -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-<!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, 
+                initial-scale=1.0, 
+                minimum-scale=1.0, 
+                maximum-scale=1.0, 
+                user-scalable=no, 
+                viewport-fit=cover" />
+<meta name="format-detection" content="telephone=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-	<!-- datepicker: jquery는 bootstrap에서 정의한 라이브러리 사용 -->
-	<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
-	<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
- 	
-	<!-- awesome icon 라이브러리 등록 (CDN) -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<!-- google icon 라이브러리 등록 (CDN) -->
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	
-	<script type="text/javascript">
-	$(function() {
-		
-		$("#womanMenu, #womanMenuDrop").mouseover(function(){
-			$("#womanMenuDrop").show();
-		});
-		
-		$("#womanMenuDrop").mouseout(function(){
-			$("#womanMenuDrop").hide();
-		});
-		
-		$(".wC").mouseover(function() {
-			$(".child1").hide();
-			$(".child2").hide();
-			$(this).next('div').toggle();
-		});
-		
-		
-	});
-	</script>
-	
-	<style type="text/css">
-	.nav-link{
-		color: black;
-	}
-	.navbar-brand{
-		color: purple;
-	}
-	pre {
-		background: white;
-		border: 0px;
-	}
-	
-	/* Remove the navbar's default margin-bottom and rounded borders */
-	.navbar {
-		margin-bottom: 0;
-		border-radius: 0;
-		position: fixed;
-		width: 100%;
-	    top: 0;
-	    z-index: 1000;
-	    background-color: white;
-	    border-bottom: 0.5px solid #f0f0f0;
-	}
-	body {
-    padding-top: 80px; /* .navbar의 높이에 맞게 조정 */
-	}
-	/* Add a gray background color and some padding to the footer */
-	footer {
-		background-color: #f2f2f2;
-		padding: 25px;
-	}
-	
-	.carousel-inner img {
-		width: 100%; /* Set width to 100% */
-		margin: auto;
-		min-height: 200px;
-	}
-	
-	/* Hide the carousel text when the screen is less than 600 pixels wide */
-	@media ( max-width : 600px) {
-		.carousel-caption {
-			display: none;
-		}
-	}
-	
-	article {
-		min-height: 795px;
-	}
-	
-	#welcome {
-		color: grey;
-		margin: 0 auto;
-	}
-	.navbar i {
-		margin-left: 15px;
-	}
-	#womanMenu, #womanMenu.dropdown-item{
-		cursor: pointer;
-	}
-	</style>
+<!-- CSS -->
+<link rel="stylesheet" href="/resources/styles/reset.css">
+<link rel="stylesheet" href="/resources/styles/common.css">
+<link rel="stylesheet" href="/resources/styles/root.css">
+<link rel="stylesheet" href="/resources/styles/layout.css">
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-	<!-- 개발자가 작성한 소스의 head 태그를 여기에 넣게 된다. title은 제외 -->
-	<decorator:head/>
+
+
+
+<!-- Mian JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+
+<!--제이쿼리-->
+<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- loginForm JS -->
+<script src="/resources/js/loginForm.js"></script>
+
+<!-- icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<title>Reve<decorator:title />
+</title>
+
+<decorator:head />
 </head>
 <body>
-	<header>
-		<nav class="navbar navbar-expand-md">
-			<!-- Brand -->
-			<a class="navbar-brand" href="/"><i class="fa fa-instagram" style="font-size:36px"></i></a>
-
-			<!-- Toggler/collapsibe Button -->
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-
-			<!-- Navbar links -->
-			<div class="collapse navbar-collapse" id="collapsibleNavbar">
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item">
-					<a class="nav-link" href="/notice/list.do">공지사항</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/image/list.do">Gallery</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/board/list.do">일반게시판</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/shop/list.do">쇼핑몰</a>
-				</li>
-				<li class="nav-item dropdown">
-			      <a class="nav-link" id="womanMenu">
-			        Woman
-			      </a>
-			      <div class="dropdown-menu dropright" id="womanMenuDrop" aria-haspopup="true" aria-expanded="false">
-			        <a class="dropdown-item wC" href="#">패딩</a>
-			        <div class="dropdown-menu child1" aria-labelledby="childDropdown1">
-				      <a class="dropdown-item" href="#">숏패딩</a>
-				      <a class="dropdown-item" href="#">롱패딩</a>
-				      <a class="dropdown-item" href="#">패딩조끼</a>
-				    </div>
-			        <a class="dropdown-item wC" href="#">코트</a>
-			        <div class="dropdown-menu child2" aria-labelledby="childDropdown2">
-				      <a class="dropdown-item" href="#">양모</a>
-				      <a class="dropdown-item" href="#">밍크</a>
-				      <a class="dropdown-item" href="#">떡볶이</a>
-				    </div>
-			        <a class="dropdown-item" href="#">셔츠</a>
-			      </div>
-			      
-			    </li>
-			    
-				<c:if test="${(!empty login) && (login.gradeNo == 9) }">
-					<li class="nav-item">
-						<a class="nav-link" href="/goods/list.do">상품관리</a>
-					</li>
-				</c:if>
+	<!-- header (S) -->
+	<header class="header">
+		<div class="headerwrap display-flex">
+			<h1 class="logo">
+				<a href="/main/main.do" target="blank_">
+					<img src="/resources/image/logo.svg" alt="로고" />
+				</a>
+			</h1>
+			<ul class="gnb display-flex">
+				<li><a href="#">NEW</a></li>
+				<li><a href="#">BRAND</a></li>
+				<li><a href="#">WOMAN</a></li>
+				<li><a href="#">MAN</a></li>
+				<li><a href="#">BAG</a></li>
+				<li><a href="#">ACC</a></li>
+				<li><a href="#">EVENT</a></li>
 			</ul>
-			<ul class="navbar-nav">
-				<c:if test="${ empty login }">
-					<!-- 로그인 하지 않았을 때 -->
-					<li class="nav-item">
-						<a class="nav-link" href="/member/loginForm.do">
-						<i class="fa fa-sign-in" style="font-size:22px;"></i>
-						</a>
+			<div class="header--icons display-flex">
+				<ul class="header--icons__list display-flex">
+					<li class="search">
+						<button>
+							<img src="/resources/image/search.svg" alt="검색" />
+						</button>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/member/writeForm.do">
-						<i class="fa fa-user" style="font-size:22px"></i></a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/member/searchID.do">
-						<i class="fa fa-search" style="font-size:22px"></i></a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/cart/list.do"><i class="fa fa-shopping-bag" style="font-size:22px"></i></a>
-					</li>
-				</c:if>
-				<c:if test="${ !empty login }">
-					<!-- 로그인 했을 때 -->
-					<li class="nav-item">
-						<span class="nav-link">
-							<c:if test="${ empty login.photo }">
-								<i class="fa fa-user-circle-o"></i>
-							</c:if>
-							<c:if test="${ !empty login.photo }">
-								<img src="${login.photo }" class="round-circle"
-								style="width:30px; height:30px">
-							</c:if>
-							${login.id }
-						</span>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/member/logout.do">
-						<i class="fa fa-sign-out"></i>로그아웃</a>
-					</li>
+					<li class="user"><a href="/member/view.do">
+							<img src="/resources/image/usericon.svg" alt="마이페이지" />
+						</a></li>
+					<li class="cart"><a href="#">
+							<img src="/resources/image/cart.svg" alt="장바구니" />
+						</a></li>
 					<c:if test="${login.gradeNo == 9 }">
-						<li class="nav-item">
-							<a class="nav-link" href="/member/list.do">회원리스트보기</a>
-						</li>
+						<li class="nav-item"><a class="nav-link" href="/member/list.do">회원리스트보기</a></li>
 					</c:if>
-					<li class="nav-item">
-						<a class="nav-link" href="/member/view.do">내정보보기</a>
-					</li>
-				</c:if>
-			</ul>
+
+				</ul>
+				<a class="login" href="/member/loginForm.do">
+					<img src="/resources/image/lock.svg" alt="로그인" />
+				</a>
+
 			</div>
-		</nav>
-	
+		</div>
 	</header>
+	<!-- header (E) -->
 	<article>
 		<!-- 여기에 개발자 작성한 body 태그 안에 내용이 들어온다. -->
 		<decorator:body />
 	</article>
-	<footer class="container-fluid text-center">
-		<p>이 홈페이지의 저작권은 이현진에게 있습니다.</p>
+	<!-- footer (S) -->
+	<footer class="footer">
+		<div class="footerwrap">
+			<div class="footer--contents display-flex">
+				<div class="footer--company">
+					<ul class="footer--contents__list display-flex">
+						<li><a href="#">회사소개</a></li>
+						<li><a href="#">공지사항</a></li>
+						<li><a href="#">이용약관</a></li>
+						<li><a href="#">개인정보처리방침</a></li>
+						<li><a href="#">제휴상담</a></li>
+					</ul>
+					<div class="company--infowrap display-flex">
+						<p>(주)레브</p>
+						<ul class="company--info">
+							<li><strong>공통대표자명</strong> 이진형 김정현 박범수 신재준</li>
+							<li><strong>사업자등록번호</strong> 123-45-6789 <a href="#" style="display: inline-block">[사업자정보확인]</a></li>
+							<li><strong>통신판매업신고번호</strong> 205-경기고양-1234</li>
+							<li><strong>주소</strong> 12345 경기도 고양시 일산서구</li>
+							<li><strong>개인정보보호책임자</strong> 이진형 김정현 박범수 신재준</li>
+						</ul>
+					</div>
+				</div>
+				<a class="logo" href="index.html">
+					<img src="/resources/image/logo_light.svg" alt="로고" />
+				</a>
+				<div class="footer-service display-flex">
+					<p class="csnumber">
+						고객센터
+						<a href="tel:01047829909" style="display: inline-block">1588-1125</a>
+					</p>
+					<p>
+						<strong>운영시간</strong> 10:00 ~ 17:00 (토,일요일 / 공휴일 휴무)
+					</p>
+					<p>
+						<strong>E-mail</strong>
+						<a href="mailto:bruu1125@gmail.com" style="display: inline-block">abcd1234@gmail.com</a>
+					</p>
+					<div class="footer-snsicons">
+						<ul class="snsicons--list display-flex">
+							<li><a href="#">
+									<img src="/resources/image/sns_instagram.svg" alt="인스타그램" />
+								</a></li>
+							<li><a href="#">
+									<img src="/resources/image/sns_x.svg" alt="엑스" />
+								</a></li>
+							<li><a href="#">
+									<img src="/resources/image/sns_youtube.svg" alt="유튜브" />
+								</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<p class="footer--copyright">COPYRIGHT © REVE ALL RIGHT RESERVED.</p>
+		</div>
 	</footer>
-	
-	
-	  <!-- The Modal -->
-	  <div class="modal fade" id="msgModal">
-	    <div class="modal-dialog">
-	      <div class="modal-content">
-	      
-	        <!-- Modal Header -->
-	        <div class="modal-header">
-	          <h4 class="modal-title">처리 결과 모달 창</h4>
-	          <button type="button" class="close" data-dismiss="modal">&times;</button>
-	        </div>
-	        
-	        <!-- Modal body -->
-	        <div class="modal-body">
-	          ${msg}
-	        </div>
-	        
-	        <!-- Modal footer -->
-	        <div class="modal-footer">
-	          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-	        </div>
-	        
-	      </div>
-	    </div>
-	  </div>
-  
+	<!-- footer (E) -->
+
+
+	<!-- The Modal -->
+	<div class="modal fade" id="msgModal" style="display: none">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<!-- Modal Header -->
+				<div class="modal-header">
+
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<!-- Modal body -->
+				<div class="modal-body">${msg}</div>
+
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
 	<!-- session 담은 msg를 보여주는 모달창 -->
 	<c:if test="${!empty msg}">
 		<!-- 모달을 보이게하는 javascript -->
 		<script type="text/javascript">
 			$(function() {
 				$("#msgModal").modal("show");
-				
+
 			})
 		</script>
 	</c:if>
-	
+	<script>
+		AOS.init();
+	</script>
 </body>
 </html>
 <%-- <%session.removeAttribute("msg"); %> --%>
