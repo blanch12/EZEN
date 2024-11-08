@@ -20,6 +20,67 @@
 	 insert into member(id, pw, name, gender, email, birth, tel)
 	 values (#{id}, #{pw}, #{name}, #{gender}, #{email}, #{birth}, #{tel})
 	</insert>
+	
+	<select id="list" resultType="org.zerock.member.vo.LoginVO">
+	    select id, name, birth, tel, gradeNo, gradeName, status 
+	    from (
+	        select rownum rnum, id, name, birth, tel, gradeNo, gradeName, status 
+	        from (
+	            select m.id, m.name, m.birth, m.tel, m.gradeNo, g.gradeName, m.status 
+	            from member m, grade g 
+	            where m.gradeNo = g.gradeNo 
+	            order by id asc
+	        )
+	    )
+	    where rnum between #{startRow} and #{endRow}
+	</select>
+	
+	<select id="getTotalRow" resultType="Long">
+  		select count(*)
+  		from member
+  		<!-- 검색을 달아야 한다. -->
+  		<include refid="search"></include>
+  	</select>
+  	<sql id="search">
+  	<!-- 검색어가 없거나 null일때 동작하지 않도록 처리 -->
+  	<if test="word != null and word != ''.toString()">
+  		<!-- trim안의 쿼리문 작성후 제일앞에 where 붙이고 where 다음에 나오는 or는 제거합니다. -->
+		<trim prefix="where" prefixOverrides="or">
+			 <!-- t(제목) 이 있으면 -->
+			<if test="key.indexOf('t') >= 0">
+				<!-- '%' || #{word} || '%' => 하나의 문자열로 만들어 줍니다.(oracle) -->
+				or title like '%' || #{word} || '%' 
+			</if>
+			<if test="key.indexOf('c') >= 0">
+				or content like '%' || #{word} || '%'
+			</if>
+			<if test="key.indexOf('w') >= 0">
+				or writer like '%' || #{word} || '%'
+			</if>
+		</trim> 
+	</if> 	
+  	</sql>
+  	
+  	<select id="view" resultType="org.zerock.member.vo.LoginVO">
+  		select m.id, m.pw, m.name, m.gender,
+		m.birth, m.tel, m.email,
+		m.regDate,
+		m.conDate,
+		m.gradeNo, g.gradeName, m.status
+		from member m, grade g
+		where (id = #{id}) and (m.gradeNo = g.gradeNo)
+  	</select>
+  	
+  	<update id="changeStatus">
+  	update member
+	set status = #{status} where id = #{id}
+  	</update>
+  	
+  	<update id="changeGradeNo">
+  	update member
+	set gradeNo = #{gradeNo} where id = #{id}
+  	</update>
+  	
   </mapper>
   
   

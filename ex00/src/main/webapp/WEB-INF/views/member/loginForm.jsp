@@ -4,8 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link>
+
 <link rel="stylesheet" href="/resources/styles/loginForm.css">
+
 <title>로그인 폼</title>
 
 <style type="text/css">

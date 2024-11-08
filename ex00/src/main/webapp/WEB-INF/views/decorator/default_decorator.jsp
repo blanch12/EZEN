@@ -15,6 +15,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
 <!-- CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="/resources/styles/reset.css">
 <link rel="stylesheet" href="/resources/styles/common.css">
 <link rel="stylesheet" href="/resources/styles/root.css">

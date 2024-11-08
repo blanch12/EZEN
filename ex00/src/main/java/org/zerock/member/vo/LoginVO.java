@@ -1,5 +1,9 @@
 package org.zerock.member.vo;
 
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
@@ -13,8 +17,12 @@ public class LoginVO {
 	private String gender;
 	private String tel;
 	private String email;
-	private String birth;
-	private Long newMsgCont;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date birth;
+	private Date regDate;
+	private Date conDate;
+	private String status;
+	private Long newMsgCnt;
 	private Integer gradeNo;
 	// grade table
 	private String gradeName;

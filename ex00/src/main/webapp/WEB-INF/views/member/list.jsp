@@ -13,6 +13,7 @@
 <!-- 4. 우리가 만든 라이브러리 등록 -->
 <script type="text/javascript" src="boardInputUtil.js"></script>
 
+
 <script type="text/javascript">
 $(function(){
 	//  2. 라이브러리 등록확인 
