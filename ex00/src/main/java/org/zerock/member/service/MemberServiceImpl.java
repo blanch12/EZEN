@@ -58,4 +58,22 @@ public class MemberServiceImpl implements MemberService {
 		return mapper.changeGradeNo(vo);
 	}
 
+	@Override
+	public Integer conUpdate(String id) {
+		// TODO Auto-generated method stub
+		return mapper.conUpdate(id);
+	}
+
+	@Override
+	public Integer update(LoginVO vo) {
+		// TODO Auto-generated method stub
+		return mapper.update(vo);
+	}
+
+	@Override
+	public Integer delete(LoginVO vo) {
+		// TODO Auto-generated method stub
+		return mapper.delete(vo);
+	}
+
 }

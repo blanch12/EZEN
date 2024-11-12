@@ -16,13 +16,13 @@
 
 <!-- CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 <link rel="stylesheet" href="/resources/styles/reset.css">
 <link rel="stylesheet" href="/resources/styles/common.css">
 <link rel="stylesheet" href="/resources/styles/root.css">
 <link rel="stylesheet" href="/resources/styles/layout.css">
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
 
 
 
@@ -33,10 +33,10 @@
 
 
 <!--제이쿼리-->
-<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
 <!-- loginForm JS -->
 <script src="/resources/js/loginForm.js"></script>
 
@@ -80,7 +80,7 @@
 					<li class="cart"><a href="#">
 							<img src="/resources/image/cart.svg" alt="장바구니" />
 						</a></li>
-					<c:if test="${login.gradeNo == 9 }">
+					<c:if test="${login != null && login.gradeNo == 9 }">
 						<li class="nav-item"><a class="nav-link" href="/member/list.do">회원리스트보기</a></li>
 					</c:if>
 
@@ -186,7 +186,7 @@
 			$(function() {
 				$("#msgModal").modal("show");
 
-			})
+			});
 		</script>
 	</c:if>
 	<script>

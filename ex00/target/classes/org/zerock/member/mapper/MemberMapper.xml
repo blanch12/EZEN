@@ -70,6 +70,18 @@
 		from member m, grade g
 		where (id = #{id}) and (m.gradeNo = g.gradeNo)
   	</select>
+  	<update id="update">
+  		update member
+  		set name = #{name}, gender = #{gender}, birth = #{birth},
+  		tel = #{tel}, email = #{email}
+  		where (id = #{id}) and (pw = #{pw})
+  	</update>
+  	
+  	<update id="delete">
+  		update member
+  		set status = '탈퇴'
+  		where id = #{id} and pw = #{pw}
+  	</update>
   	
   	<update id="changeStatus">
   	update member
@@ -81,6 +93,10 @@
 	set gradeNo = #{gradeNo} where id = #{id}
   	</update>
   	
+  	<update id="conUpdate">
+  	update member
+	set conDate = sysDate where id = #{id}
+  	</update>
   </mapper>
   
   

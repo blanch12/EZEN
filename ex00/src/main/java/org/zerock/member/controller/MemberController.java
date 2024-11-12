@@ -1,5 +1,6 @@
 package org.zerock.member.controller;
 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -16,6 +17,7 @@ import org.zerock.member.vo.LoginVO;
 import org.zerock.util.page.PageObject;
 
 import lombok.extern.log4j.Log4j;
+import oracle.jdbc.proxy.annotation.Post;
 
 @Controller
 @Log4j
@@ -36,7 +38,7 @@ public class MemberController {
 	// 로그인 처리
 	@PostMapping("/login.do")
 	public String login(LoginVO vo,
-			HttpSession session, RedirectAttributes rttr) {
+			HttpSession session, RedirectAttributes rttr,Model model) {
 		log.info("========= login.do =============");
 		
 		// DB에서 로그인 정보를 가져옵니다. - id, pw를 넘겨서
@@ -48,8 +50,8 @@ public class MemberController {
 			
 			return "redirect:/member/loginForm.do";
 		}
-		
 		// 로그인 정보를 찾았을때
+		model.addAttribute("vo", service.conUpdate(loginVO.getId()));
 		session.setAttribute("login", loginVO);
 		rttr.addFlashAttribute("msg",
 			loginVO.getName() + "님은 " + 
@@ -116,9 +118,36 @@ public class MemberController {
 			id = loginVO.getId();
 		}
 		
+		
 		model.addAttribute("vo", service.view(id));
 		
 		return "member/view";
+	}
+	
+	@GetMapping("/updateForm.do")
+	public String updateForm(String id,Model model) {
+		log.info("member/updateForm");
+		model.addAttribute("vo", service.view(id));
+		return "member/updateForm";
+	}
+	
+	@PostMapping("/update.do")
+	public String update(LoginVO vo, Model model,RedirectAttributes rttr) {
+		log.info("/member/update.do");
+		
+		model.addAttribute("vo", service.update(vo));
+		rttr.addFlashAttribute("msg", "회원정보 수정 완료");
+		return "redirect:/member/view.do?id="+vo.getId();
+	}
+	
+	@PostMapping("/delete.do")
+	public String delete(LoginVO vo, Model model, RedirectAttributes rttr) {
+		log.info("/member/delete.do");
+		
+		model.addAttribute("vo", service.delete(vo));
+		
+		rttr.addFlashAttribute("msg", "회원탈퇴 완료");
+		return "redirect:/main/main.do";
 	}
 	
 	@GetMapping("/changeStatus.do")
@@ -146,6 +175,7 @@ public class MemberController {
 		
 		return "redirect:list.do?" + pageObject.getPageQuery();
 	}
+	
 }
 
 

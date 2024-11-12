@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="org.zerock.qna.mapper.QnaMapper">
+  
+  <select id="list" resultType="org.zerock.qna.vo.QnaVO">
+  	select no, title, writer, writeDate, status
+  	from (
+	  	select rownum rnum, no, title, writer, writeDate, status
+	  	from (
+	  		select no, title, writer, writeDate, status
+	  		from qna
+	  		<include refid="search"></include>
+	  		order by no desc
+	  	)
+  	)
+  	where rnum between #{startRow} and #{endRow}
+  </select>
+  <select id="ownList" resultType="org.zerock.qna.vo.QnaVO">
+  	select q.no, q.title, q.writer, q.writeDate, q.status, m.id
+  	from qna q, member m
+  	where (q.writer = #{id}) and (q.writer = m.id)
+  	order by no desc
+  	
+  </select>
+  
+  <select id="getTotalRow" resultType="Long">
+  		select count(*)
+  		from qna
+  		<!-- 검색을 달아야 한다. -->
+  		<include refid="search"></include>
+  	</select>
+  	
+  	<!-- 일반게시판 리스트 검색 처리 -->
+  	<!-- sql 태그는 함수라고 생각하면 편리합니다. -->
+  	<sql id="search">
+  	<!-- 검색어가 없거나 null일때 동작하지 않도록 처리 -->
+  	<if test="word != null and word != ''.toString()">
+  		<!-- trim안의 쿼리문 작성후 제일앞에 where 붙이고 where 다음에 나오는 or는 제거합니다. -->
+		<trim prefix="where" prefixOverrides="or">
+			 <!-- t(제목) 이 있으면 -->
+			<if test="key.indexOf('t') >= 0">
+				<!-- '%' || #{word} || '%' => 하나의 문자열로 만들어 줍니다.(oracle) -->
+				or title like '%' || #{word} || '%' 
+			</if>
+			<if test="key.indexOf('c') >= 0">
+				or content like '%' || #{word} || '%'
+			</if>
+			<if test="key.indexOf('w') >= 0">
+				or writer like '%' || #{word} || '%'
+			</if>
+		</trim> 
+	</if> 	
+  	</sql>
+  
+  <select id="view" resultType="org.zerock.qna.vo.QnaVO">
+  	select q.no, q.title, q.content, q.filename, q.writer, q.writeDate
+  	from qna q, member m
+  	where 
+  	(q.no = #{no})
+  	and (q.writer = m.id)
+  </select>
+  
+  <insert id="write">
+  	insert into qna
+	(no, title, content, writer, filename)
+	values (qna_seq.nextval, #{title}, #{content}, #{writer}, #{filename})
+  </insert>
+  
+  <update id="viewStatus">
+  	update qna
+  	set status = '확인'
+  	where no = #{no}
+  </update>
+  </mapper>

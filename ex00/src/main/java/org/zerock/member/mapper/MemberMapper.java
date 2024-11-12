@@ -23,4 +23,10 @@ public interface MemberMapper {
 	public Integer changeStatus(LoginVO vo);
 	
 	public Integer changeGradeNo(LoginVO vo);
+	
+	public Integer conUpdate(String id);
+	
+	public Integer update(LoginVO vo);
+	
+	public Integer delete(LoginVO vo);
 }
