@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.zerock.boardreply.mapper.BoardReplyMapper;
-import org.zerock.boardreply.vo.BoardReplyVO;
 import org.zerock.qnareply.mapper.QnaReplyMapper;
 import org.zerock.qnareply.vo.QnaReplyVO;
 import org.zerock.util.page.PageObject;

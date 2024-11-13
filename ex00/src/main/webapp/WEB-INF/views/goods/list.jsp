@@ -152,7 +152,7 @@
 		<%-- 	<c:if test="${!empty login }"> --%>
 		<!-- 로그인이 되어있으면 등록버튼이 보이게 처리 -->
 		<div>
-			<a href="writeForm.do?perPageNum=" ${pageObject.perPageNum }"
+			<a href="writeForm.do?perPageNum=${pageObject.perPageNum }"
 				class="btn btn-primary">등록</a>
 		</div>
 		<%-- 	</c:if> --%>

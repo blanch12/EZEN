@@ -55,7 +55,7 @@
   	</sql>
   
   <select id="view" resultType="org.zerock.qna.vo.QnaVO">
-  	select q.no, q.title, q.content, q.filename, q.writer, q.writeDate
+  	select q.no, q.title, q.content, q.filename, q.writer, q.writeDate, q.status
   	from qna q, member m
   	where 
   	(q.no = #{no})
@@ -67,10 +67,27 @@
 	(no, title, content, writer, filename)
 	values (qna_seq.nextval, #{title}, #{content}, #{writer}, #{filename})
   </insert>
-  
+  <update id="update">
+  	update qna
+  	set
+  	title = #{title}, content = #{content}, filename = #{filename, jdbcType=VARCHAR}
+  	where no = #{no}
+  </update>
   <update id="viewStatus">
   	update qna
   	set status = '확인'
   	where no = #{no}
   </update>
+  
+  <delete id="delete">
+  delete from qna
+  where no = #{no}
+  </delete>
+  
+  <update id="deleteImage">
+  update qna
+  set filename = null
+  where no = #{no}
+  </update>
+  
   </mapper>

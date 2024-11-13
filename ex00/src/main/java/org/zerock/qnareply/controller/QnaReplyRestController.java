@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.zerock.member.vo.LoginVO;
 import org.zerock.qnareply.service.QnaReplyService;
 import org.zerock.qnareply.vo.QnaReplyVO;
 import org.zerock.util.page.PageObject;
@@ -131,10 +132,10 @@ public class QnaReplyRestController {
 	
 	
 	private String getId(HttpSession session) {
-		// LoginVO vo = (LoginVO) session.getAttribute("login");
-		// String id = vo.getId();
+		 LoginVO vo = (LoginVO) session.getAttribute("login");
+		 String id = vo.getId();
 		// 강제 로그인 처리를 합니다. - 테스트를 위해서
-		return "test1";
+		return id;
 	}
 	
 	

@@ -1,9 +1,5 @@
 package org.zerock.qna.controller;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -12,11 +8,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.zerock.member.vo.LoginVO;
-import org.zerock.qna.mapper.QnaMapper;
 import org.zerock.qna.service.QnaService;
 import org.zerock.qna.vo.QnaVO;
 import org.zerock.util.file.FileUtil;
@@ -67,14 +63,16 @@ public class QnaController {
 	public String view(Model model, Long no, QnaVO vo, HttpSession session) {
 		
 		LoginVO loginVO = (LoginVO) session.getAttribute("login");
-		if (loginVO.getGradeNo() == 9) {
-			// 관리자 열람시 처리상태 변경
-			service.viewStatus(vo);
+		if(loginVO == null) return "redirect:/member/loginForm.do";
+			vo = service.view(no);
+			if (loginVO.getGradeNo() == 9 && "접수".equals(vo.getStatus())) {
+				// 관리자 '접수'열람시 처리상태 변경
+				service.viewStatus(vo);
+			}
 			model.addAttribute("vo", service.view(no));
-		}
-		else {
-			model.addAttribute("vo", service.view(no));
-		}
+			model.addAttribute("id", loginVO.getId());
+			model.addAttribute("gradeNo", loginVO.getGradeNo());
+		
 		return "qna/view";
 	}
 	
@@ -98,10 +96,49 @@ public class QnaController {
 		}
 		// QnaVO의 file 필드가 null이 아니고 비어 있지 않다면 파일 저장을 수행
 		vo.setFilename(FileUtil.upload(path, imageName, request));
+		if(vo.getFilename().equals("/upload/qna/noImage.jpg")) {
+			vo.setFilename(null);
+		}
 		service.write(vo);
 		return "redirect:/qna/list.do";
 	}
 	
+	// QnA 글수정
+	@GetMapping("/updateForm.do")
+	public String updateForm(Long no, Model model, @ModelAttribute(name="pageObject") PageObject pageObject){
+		log.info("/qna/updateForm.do");
+		
+		model.addAttribute("vo", service.view(no));
+		return "/qna/updateForm";
+	}
+	
+	@PostMapping("/update.do")
+	public String update(QnaVO vo, MultipartFile imageName, HttpServletRequest request,
+			PageObject pageObject) throws Exception {
+			// 파일이 있으면 새파일로, 없으면 기존 파일로
+			if (imageName != null && !imageName.isEmpty()) {
+		        vo.setFilename(FileUtil.upload(path, imageName, request));
+		    } else {
+		        // 새 파일이 없으면 기존 파일 경로 유지
+		        vo.setFilename(service.view(vo.getNo()).getFilename());
+		    }
+			
+			// 이미지가 없을때 filename = null 로 변경
+			if(vo.getFilename().equals("/upload/qna/noImage.jpg")) {
+				vo.setFilename(null);
+			}
+			log.info("=== filename = " + vo.getFilename() + "===========");
+			service.update(vo);
+			
+		return "redirect:/qna/view.do?no="+vo.getNo()+"&"+pageObject.getPageQuery();
+	}
+	
+	@PostMapping("/delete.do")
+	public String delete(QnaVO vo, PageObject pageObject) throws Exception {
+		
+		service.delete(vo);
+		return "redirect:/qna/list.do?"+pageObject.getPageQuery();
+	}
 	// MultipartFile filename
 	//vo.setFilename(FileUtil.upload(path, imageMain, request));
 }

@@ -49,14 +49,14 @@
 	<![CDATA[
 		update qna_reply
 		set content = #{content}
-		where rno = #{rno} and id = #{id}
+		where rno = #{rno}
 	]]>
 	</update>
 	
 	<!-- 일반 게시판 댓글삭제 쿼리 -->
 	<delete id="delete">
 		delete from qna_reply
-		where rno = #{rno} and id = #{id}
+		where rno = #{rno}
 	</delete>
 
   </mapper>

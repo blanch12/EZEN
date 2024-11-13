@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-import org.zerock.boardreply.vo.BoardReplyVO;
 import org.zerock.qnareply.vo.QnaReplyVO;
 import org.zerock.util.page.PageObject;
 

@@ -57,4 +57,23 @@ public class QnaServiceImpl implements QnaService{
 		return mapper.ownList(pageObject, id);
 	}
 
+	@Override
+	public Integer update(QnaVO vo) {
+		// TODO Auto-generated method stub
+		return mapper.update(vo);
+	}
+
+	@Override
+	public Integer delete(QnaVO vo) {
+		// TODO Auto-generated method stub
+		return mapper.delete(vo);
+	}
+
+	@Override
+	public Integer deleteImage(QnaVO vo) {
+		// TODO Auto-generated method stub
+		return mapper.deleteImage(vo);
+	}
+
+	
 }

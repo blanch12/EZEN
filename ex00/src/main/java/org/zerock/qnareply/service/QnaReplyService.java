@@ -2,7 +2,6 @@ package org.zerock.qnareply.service;
 
 import java.util.List;
 
-import org.zerock.boardreply.vo.BoardReplyVO;
 import org.zerock.qnareply.vo.QnaReplyVO;
 import org.zerock.util.page.PageObject;
 

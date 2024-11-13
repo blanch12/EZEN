@@ -21,4 +21,10 @@ public interface QnaMapper {
 	public Integer viewStatus(QnaVO vo);
 	
 	public List<QnaVO> ownList(PageObject pageObject,@Param("id") String id);
+	
+	public Integer update(QnaVO vo);
+	
+	public Integer delete(QnaVO vo);
+	
+	public Integer deleteImage(QnaVO vo);
 }

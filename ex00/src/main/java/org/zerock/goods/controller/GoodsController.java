@@ -1,9 +1,7 @@
 package org.zerock.goods.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,10 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.category.vo.CategoryVO;
 import org.zerock.goods.service.GoodsService;
-import org.zerock.goods.vo.GoodsColorVO;
-import org.zerock.goods.vo.GoodsImageVO;
 import org.zerock.goods.vo.GoodsSearchVO;
-import org.zerock.goods.vo.GoodsSizeVO;
 import org.zerock.goods.vo.GoodsVO;
 import org.zerock.util.file.FileUtil;
 import org.zerock.util.page.PageObject;
@@ -188,7 +182,7 @@ public class GoodsController {
 			imageFileNames.add(FileUtil.upload(path, file, request));
 		}
 		vo.setSale_price(vo.sale_price());
-		Integer result = service.write(vo, imageFileNames, size_names, color_names);
+		service.write(vo, imageFileNames, size_names, color_names);
 		
 		rttr.addFlashAttribute("msg", "상품이 등록되었습니다.");
 		

@@ -1,18 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- qnareply.jsp -->
 <div class="row" style="margin : 40px -10px 0 -10px">
 	<div class="col-lg-12">
 		<!-- card -->
-		<div class="card">
+		<div class="card replyCard">
 			<!-- 댓글 제목 -->
 			<div class="card-header" style="background:#e0e0e0">
-				<i class="fa fa-comments fa-fw"></i> Reply
+				<i class="fa fa-comments fa-fw"></i> 답변
 				<!-- Button to Open the Modal -->
+				<c:if test="${id != null && gradeNo == 9 }">
 				<button type="button" class="btn btn-primary btn-sm pull-right"
 				 data-toggle="modal" data-target="#replyModal" id="newReplyBtn">
-					New Reply
+					답변 등록
 				</button>
+				</c:if>
 			</div>
 
 			<!-- 댓글 리스트 데이터 출력 -->		
@@ -32,15 +35,15 @@
 				</ul>
 			</div> <!-- card-body -->
 			
-			<div class="card-footer">
-				<ul class="pagination pagination-sm">
-					<li class="page-item""><a class="page-link" href="#">Previous</a></li>
-					<li class="page-item"><a class="page-link" href="#">1</a></li>
-					<li class="page-item"><a class="page-link" href="#">2</a></li>
-					<li class="page-item"><a class="page-link" href="#">3</a></li>
-					<li class="page-item"><a class="page-link" href="#">Next</a></li>
-				</ul>
-			</div>
+<!-- 			<div class="card-footer"> -->
+<!-- 				<ul class="pagination pagination-sm"> -->
+<!-- 					<li class="page-item""><a class="page-link" href="#">Previous</a></li> -->
+<!-- 					<li class="page-item"><a class="page-link" href="#">1</a></li> -->
+<!-- 					<li class="page-item"><a class="page-link" href="#">2</a></li> -->
+<!-- 					<li class="page-item"><a class="page-link" href="#">3</a></li> -->
+<!-- 					<li class="page-item"><a class="page-link" href="#">Next</a></li> -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
 		</div>
 	</div>
 </div>

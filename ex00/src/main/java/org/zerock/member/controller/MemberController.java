@@ -17,7 +17,6 @@ import org.zerock.member.vo.LoginVO;
 import org.zerock.util.page.PageObject;
 
 import lombok.extern.log4j.Log4j;
-import oracle.jdbc.proxy.annotation.Post;
 
 @Controller
 @Log4j
@@ -30,8 +29,13 @@ public class MemberController {
 	
 	// 로그인 폼
 	@GetMapping("/loginForm.do")
-	public String loginForm() {
+	public String loginForm(HttpServletRequest request, HttpSession session) {
 		log.info("========= loginForm.do ============");
+		String referer = request.getHeader("Referer");
+	    if (referer != null && !referer.contains("/loginForm.do")) { // 로그인 폼 페이지가 아닌 경우만 저장
+	        session.setAttribute("prevPage", referer);
+	    }
+	    
 		return "member/loginForm";
 	}
 	
@@ -48,6 +52,7 @@ public class MemberController {
 			rttr.addFlashAttribute("msg",
 				"로그인 정보가 맞지 않습니다.<br>정보를 확인하시고 다시 시도해 주세요");
 			
+			
 			return "redirect:/member/loginForm.do";
 		}
 		// 로그인 정보를 찾았을때
@@ -57,12 +62,15 @@ public class MemberController {
 			loginVO.getName() + "님은 " + 
 			loginVO.getGradeName() + "(으)로 로그인 되었습니다.");
 		
-		
-		return "redirect:/main/main.do";
+		 // 이전 페이지로 리다이렉트
+	    String prevPage = (String) session.getAttribute("prevPage");
+	    session.removeAttribute("prevPage"); // 세션에서 제거하여 다시 사용되지 않도록 함
+	    
+	    return prevPage != null ? "redirect:" + prevPage : "redirect:/main/main.do"; // 이전 페이지가 없으면 기본 페이지로 이동
 	}
 	
 	@GetMapping("/logout.do")
-	public String logout(HttpSession session,
+	public String logout(HttpSession session, HttpServletRequest request,
 			RedirectAttributes rttr) {
 		log.info("========= logout.do =============");
 		
@@ -71,8 +79,11 @@ public class MemberController {
 		rttr.addFlashAttribute("msg",
 				"로그 아웃이 되었습니다.<br>불편한 사항은 질문 답변 게시판을 이용해 주세요");
 		
-		
-		return "redirect:/main/main.do";
+		// 이전 페이지 URL 가져오기
+	    String referer = request.getHeader("Referer");
+	    
+	    // 이전 페이지로 리다이렉트, referer가 null일 경우 메인 페이지로 이동
+	    return referer != null ? "redirect:" + referer : "redirect:/main/main.do";
 	}
 	
 	@GetMapping("/writeForm.do")

@@ -11,7 +11,6 @@ import org.zerock.category.vo.CategoryVO;
 import org.zerock.goods.mapper.GoodsMapper;
 import org.zerock.goods.vo.GoodsColorVO;
 import org.zerock.goods.vo.GoodsImageVO;
-import org.zerock.goods.vo.GoodsPriceVO;
 import org.zerock.goods.vo.GoodsSearchVO;
 import org.zerock.goods.vo.GoodsSizeVO;
 import org.zerock.goods.vo.GoodsVO;

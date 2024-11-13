@@ -26,7 +26,7 @@ $(function() {
 		// tag에 적힌 data-no="${vo.no}"
 		let no = $(this).data("no");
 		//alert(no);
-		location = "view.do?no=" + no + "&inc=1"
+		location = "view.do?no=" + no
 			+ "&${pageObject.pageQuery}";
 			// pageObject의 getPageQuery()를 가져와서
 			// page, perPageNum, key, word를 붙인다.

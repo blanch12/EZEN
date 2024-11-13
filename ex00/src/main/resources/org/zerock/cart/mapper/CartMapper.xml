@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="org.zerock.cart.mapper.CartMapper">
+  	
+    <!-- 장바구니 전체 항목 조회 -->
+    <select id="list" resultType="org.zerock.cart.vo.CartVO">
+	    SELECT cartno, goodsno, goodsname, imagename, quantity, deliverycharge, saleprice
+	    FROM cart
+	    WHERE id = #{id}
+	</select>
+    
+    <!-- 장바구니 리스트 페이지 처리를 위한 전체 데이터 개수를 가져오는 쿼리 -->
+  	<select id="getTotalRow" resultType="int">
+  		select count(*)
+  		from cart
+  	</select>
+    
+    <!-- 장바구니에 상품 추가 -->
+    <insert id="addToCart" parameterType="org.zerock.cart.vo.CartDTO"> <!-- parameterType을 CartDTO로 수정 -->
+        INSERT INTO CART (CARTNO, id, goodsno, goodsname, imagename, quantity, deliverycharge, saleprice)
+   		VALUES (
+       			(SELECT NVL(MAX(CARTNO), 0) + 1 FROM CART),
+		        #{id}, 
+		        #{goodsno}, 
+		        #{goodsname}, 
+		        #{imagename}, 
+		        #{quantity}, 
+		        #{deliverycharge}, 
+		        #{saleprice}
+		    	)
+    </insert>
+
+    <!-- 장바구니에서 선택된 상품 삭제 -->
+    <delete id="removeItems">
+        DELETE FROM cart WHERE cartNo IN
+        <foreach collection="cartNos" item="cartNo" open="(" separator="," close=")">
+            #{cartNo}
+        </foreach>
+    </delete>
+
+    <!-- 장바구니 비우기 -->
+    <delete id="clearCart">
+        DELETE FROM cart 
+        Where id = #{id}
+    </delete>
+  	
+
+  </mapper>
+  
+  
+	<!-- 상품 리스트 --> 
+<!--   	<select id="list" resultType="org.zerock.cart.vo.CartVO"> -->
+<!--   		select -->
+<!-- 	  		CART_NO, GOODS_NO, GOODS_NAME, -->
+<!-- 	  		IMAGE_NAME, QUANTITY, DELIVERY_CHARGE, SALEPRICE -->
+<!--   		from -->
+<!--   		( -->
+<!-- 	  		select -->
+<!-- 	  			rownum rnum, CART_NO, GOODS_NO, GOODS_NAME, IMAGE_NAME, -->
+<!-- 	  			QUANTITY, DELIVERY_CHARGE, SALEPRICE -->
+<!-- 	  		from -->
+<!-- 		  	( -->
+<!-- 		  		select -->
+<!-- 		  			c.CART_NO, g.GOODS_NO, g.GOODS_NAME, g.IMAGE_NAME, -->
+<!-- 		  			c.QUANTITY, c.DELIVERY_CHARGE, c.SALEPRICE -->
+<!-- 		  		from -->
+<!-- 		  			cart c, goods g -->
+<!-- 		  		where -->
+<!-- 		  			g.goods_no = c.goods_no -->
+<!-- 		  		) -->
+<!-- 		  	) -->
+<!-- 	  	) -->
+<!-- 	  	where rnum between #{pageObject.startRow} and #{pageObject.endRow} -->
+<!--   	</select> -->
+  	
+  	<!-- 페이지 처리를 위한 getTotalRow -->
+<!--   	<select id="getTotalRow" resultType="Long"> -->
+<!--   		select count(*) -->
+<!--   		from goods g, goods_price p -->
+<!--   		where -->
+<!--   		( -->
+<!--   			검색조건 -->
+<!--  			<include refid="search" /> -->
+<!-- 		  	일반조건 -->
+<!-- 		  	현재 판매되고 있는 상품 -->
+<!-- 		  	아래 CDATA를 사용한 태그는 안에 내용이 문자열로 DB서버에 전달 -->
+<!-- 		  	<![CDATA[ -->
+<!-- 		  	sale_start_date <= sysDate and -->
+<!-- 		  	trunc(sysDate) <= sale_end_date -->
+<!-- 		  	]]> -->
+<!-- 		) -->
+<!-- 		and -->
+<!-- 		( -->
+ 			<!-- 조인 조건 --> 
+<!-- 			g.goods_no = p.goods_no -->
+<!-- 		) -->
+<!--   	</select> -->
+  	
+  	
+   	<!-- 상품 상세 보기 --> 
+<!--   	<select id="view" resultType="org.zerock.goods.vo.GoodsVO"> -->
+<!--   		select -->
+<!-- 			g.goods_no, g.goods_name, g.cate_code1,  -->
+<!-- 			g.cate_code2, g.image_name, c.cate_name, -->
+<!-- 			g.content, g.company, g.product_date, -->
+<!-- 			p.price, p.discount, p.discount_rate,  -->
+<!-- 			p.sale_price, p.saved_rate, p.delivery_charge,  -->
+<!-- 			p.sale_start_date, p.sale_end_date, -->
+<!-- 			p.goods_price_no -->
+ 		<!-- from 뒤에 쓸수 있는 것 : 1. table명, 2. view이름 3. select 쿼리 -->
+<!--   		from goods g, goods_price p, category c -->
+<!--   		where -->
+<!--   			일반조건 -->
+<!--   			(g.goods_no = #{goods_no}) -->
+<!--   			<![CDATA[ -->
+<!-- 		  	and (  -->
+<!-- 		  	sale_start_date <= sysDate and -->
+<!-- 		  	trunc(sysDate) <= sale_end_date -->
+<!-- 		  	) -->
+<!-- 		  	]]> -->
+<!--   			조인조건 -->
+<!--   			and (g.goods_no = p.goods_no) -->
+<!--   			and (g.cate_code1 = c.cate_code1 and g.cate_code2 = c.cate_code2) -->
+<!--   	</select> -->
+  	
+   	<!-- 1. 상품 등록 --> 
+   	<!-- jdbcType=DB로넘어가는 변수속성 (대문자) -->
+<!--   		- null 로 데이터가 넘어갈때 DB에 속성을 알려주는 프로퍼티 -->
+<!--   		VARCHAR: 문자열, INTEGER: 정수형, BIGINT: long타입  -->
+<!--   		DOUBLE: 실수형, DATE: 날짜, TIMESTAMP: 타임스탬프 -->
+<!--   		BOOLEAN: 논리형 -->
+<!--   	 -->
+<!--   	<insert id="write"> -->
+<!--   		insert할때 primarykey를 미리 세팅할 때 사용 -->
+<!--   		<selectKey keyProperty="goods_no" resultType="Long" order="BEFORE"> -->
+<!--   			select goods_seq.nextval from dual -->
+<!--   		</selectKey> -->
+<!--   		insert into goods -->
+<!--   			(goods_no, goods_name, -->
+<!--   			cate_code1, cate_code2, image_name, -->
+<!--   			content, company, product_date) -->
+<!--   		values -->
+<!-- 	  		(#{goods_no}, #{goods_name}, #{cate_code1}, -->
+<!-- 	  		#{cate_code2}, #{image_name}, #{content}, -->
+<!-- 	  		#{company}, #{product_date,jdbcType=DATE}) -->
+<!--   	</insert> -->

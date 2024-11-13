@@ -16,4 +16,10 @@ public interface QnaService {
 	public Integer viewStatus(QnaVO vo);
 	
 	public List<QnaVO> ownList(PageObject pageObject, String id);
+	
+	public Integer update(QnaVO vo);
+	
+	public Integer delete(QnaVO vo);
+	
+	public Integer deleteImage(QnaVO vo);
 }
