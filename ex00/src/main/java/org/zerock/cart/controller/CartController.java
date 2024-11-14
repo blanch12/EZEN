@@ -15,11 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.zerock.cart.service.CartService;
@@ -47,13 +45,13 @@ public class CartController {
         // 세션에서 로그인된 사용자 아이디를 가져오기 (예: "id"라는 키로 저장된 경우)
          LoginVO loginVO = (LoginVO) session.getAttribute("login");  // 로그인된 사용자 아이디
         
+         if (loginVO == null) {
+        	 // 로그인되지 않은 경우, 로그인 페이지로 리다이렉트하거나 적절한 메시지 처리
+        	 log.warn("사용자가 로그인되지 않았습니다.");
+        	 return "redirect:/member/loginForm.do"; // 로그인 페이지로 리다이렉트 (예시)
+         }
          String id = loginVO.getId();
          
-        if (id == null) {
-            // 로그인되지 않은 경우, 로그인 페이지로 리다이렉트하거나 적절한 메시지 처리
-            log.warn("사용자가 로그인되지 않았습니다.");
-            return "redirect:/login"; // 로그인 페이지로 리다이렉트 (예시)
-        }
         
         // 페이지 처리를 위한 객체 생성
         PageObject pageObject = PageObject.getInstance(request);
@@ -89,7 +87,7 @@ public class CartController {
 
         // 로그인 상태 확인
         if (loginVO == null) {
-            return "redirect:/login"; // 로그인 안 되어 있으면 로그인 페이지로 리다이렉트
+            return "redirect:/member/loginForm.do"; // 로그인 안 되어 있으면 로그인 페이지로 리다이렉트
         }
 
         // 로그인 아이디

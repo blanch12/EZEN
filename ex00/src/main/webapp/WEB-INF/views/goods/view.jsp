@@ -148,6 +148,16 @@ $(function(){
 				<div style="padding-left: 140px; border-top: 1px solid black;">
 			      <a>추가하기</a>
 			    </div>
+			    <form action="/cart/add" method="POST">
+			            <input type="hidden" name="id" value="${login.id}" />
+			            <input type="hidden" name="goods_no" value="${vo.goods_no}" />
+			            <input type="hidden" name="goods_name" value="${vo.goods_name}" />
+			            <input type="hidden" name="image_name" value="${vo.image_name}" />
+			            <input type="hidden" name="sale_price" value="${vo.sale_price}" />
+			            <input type="hidden" name="delivery_charge" value="${vo.delivery_charge}" />
+			            <input type="number" name="quantity" value="1" min="1" required />
+			            <button type="submit">장바구니에 추가</button>
+			        </form>
 				</div>
 			</div>
 <!-- 			<div class="row"> -->

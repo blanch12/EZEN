@@ -241,7 +241,7 @@
 			 <div class="row cart-item">
                 <!-- 체크박스 -->
                 <div class="col-sm-1 center">
-                    <input type="checkbox" class="item-checkbox" onchange="updateSummary()">
+                    <input type="checkbox" class="item-checkbox" onchange="updateSummary()" checked>
                 </div>
               
                 <!-- 상품번호 -->
@@ -260,7 +260,7 @@
 
                 <!-- 수량 -->
                 <div class="col-sm-1 center">
-                    <input type="number" value="${vo.quantity}" class="item-quantity" onchange="updateSummary()">
+                    <input type="number" value="${vo.quantity}" class="item-quantity" min="1" onchange="updateSummary()">
                 </div>
 
                 <!-- 합계금액 -->
