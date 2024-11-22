@@ -5,129 +5,128 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- Bootstrap 스타일 및 스크립트 -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- jQuery UI 스타일 및 스크립트 -->
+<link rel="stylesheet"
+	href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+
+<!-- 커스텀 스타일 -->
+<link rel="stylesheet" href="/resources/styles/reset.css?after">
+<link rel="stylesheet" href="/resources/styles/common.css?after">
+<link rel="stylesheet" href="/resources/styles/root.css?after">
+<link rel="stylesheet" href="/resources/styles/reponsive.css?after">
 <meta charset="UTF-8">
-<title>[${vo.id }] 회원정보</title>
-<style type="text/css">
-	#infoDiv>.row{
-		padding: 10px;
-		border-top: 1px dotted #ccc;
-		margin: 0 10px;
-	}
+<title>마이페이지 - ${vo.name}님</title>
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+    }
+    .profile-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .profile-summary h1 {
+        font-size: 3em;
+        font-weight: bold;
+        margin-top: 10px;
+        color: #333;
+    }
+    .side-menu {
+        margin-top: 20px;
+    }
+    .side-menu ul {
+        list-style: none;
+        padding: 0;
+    }
+    .side-menu ul li {
+        padding: 10px 0;
+    }
+    .side-menu ul li a {
+        color: #555;
+        text-decoration: none;
+        font-size: 1.1em;
+    }
+    .side-menu ul li a:hover {
+        color: #000;
+    }
+    .order-status {
+        margin-top: 30px;
+    }
+    .order-status h3 {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+    }
+    .order-status div {
+        display: inline-block;
+        width: 20%;
+        font-size: 1.1em;
+    }
+    /* 회색 박스 스타일 */
+    .grade-badge {
+        background-color: #f0f0f0;
+        color: #555;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.9em;
+        font-weight: bold;
+    }
 </style>
-<script type="text/javascript">
-$(function() {
-	
-	// 탈퇴를 위한 모달창을 보여주고 닫는 이벤트
-	$("#deleteBtn").click(function(){
-		console.log("deleteBtn event......");
-		// 비밀번호 입력창 clear
-		$("#pw").val("");
-		$("#deleteModal").modal("show");
-	});
-	
-	$("#deleteCancelBtn").click(function(){
-		console.log("deleteCancelBtn event......");
-		$("#pw").val("");
-		$("#deleteModal").modal("hide");
-	});
-	// 이벤트 끝 (탈퇴 모달창)
-	
-});
-</script>
-</head>
+</head> 
 <body>
-<div class="container">
-	<div class="card">
-	  <div class="card-header">
-	  	<div>
-	  		${vo.name } (${vo.id })
-	  	</div>
-		</div>
-	  <div class="card-body" id="infoDiv">
-	  	<div class="row">
-			  <div class="col-md-3"><i class="fa fa-check"></i> 성별</div>
-			  <div class="col-md-9">${vo.gender }</div>
-			</div>
-	  	<div class="row">
-			  <div class="col-md-3"><i class="fa fa-check"></i> 생년월일</div>
-			  <div class="col-md-9"><fmt:formatDate value="${vo.birth }"
-				pattern="yyyy-MM-dd"/></div>
-			</div>
-	  	<div class="row">
-			  <div class="col-md-3"><i class="fa fa-check"></i> 연락처</div>
-			  <div class="col-md-9">${vo.tel }</div>
-			</div>
-			<div class="row">
-			  <div class="col-md-3"><i class="fa fa-check"></i> 이메일</div>
-			  <div class="col-md-9">${vo.email }</div>
-			</div>
-			<div class="row">
-			  <div class="col-md-3"><i class="fa fa-check"></i> 가입일</div>
-			  <div class="col-md-9"><fmt:formatDate value="${vo.regDate }"
-				pattern="yyyy-MM-dd"/></div>
-			</div>
-			<div class="row">
-			  <div class="col-md-3"><i class="fa fa-check"></i> 최근접속일</div>
-			  <div class="col-md-9"><fmt:formatDate value="${vo.conDate }"
-				pattern="yyyy-MM-dd"/></div>
-			</div>
-			<div class="row">
-			  <div class="col-md-3"><i class="fa fa-check"></i> 회원등급</div>
-			  <div class="col-md-9">${vo.gradeName }</div>
-			</div>
-			<div class="row">
-			  <div class="col-md-3"><i class="fa fa-check"></i> 회원상태</div>
-			  <div class="col-md-9">${vo.status }</div>
-			</div>
-		</div>
-	  <div class="card-footer">
-	  	<c:if test="${vo.id == login.id }">
-		  	<a href="/member/updateForm.do?id=${vo.id }" class="btn btn-primary">수정</a>
-		  	<button type="button" class="btn btn-danger"
-		  		id="deleteBtn">탈퇴</button>
-	  	</c:if>
-	  	<button onclick="history.back()" class="btn btn-success">되돌아가기</button>
-	  </div>
-	</div>
-</div> <!-- end of class="container" -->
-
-  <!-- The Modal - 삭제를 위한 -->
-  <div class="modal fade" id="deleteModal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-      
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">탈퇴를 위한 비밀번호를 입력하세요</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+<div class="container" style="padding-top: 200px;">
+    <!-- 회원 프로필 섹션 -->
+    <div class="profile-header">
+        <div class="profile-summary">
+            <h1>${vo.name}님은 레브 <span class="grade-badge">${vo.gradeName}</span>입니다.</h1>
         </div>
-        
-        <!-- Modal body -->
-        <div class="modal-body">
-					<!-- 삭제시 비밀번호 입력을 위한 form태그 사용 -->
-					<form action="delete.do" method="post" id="deleteForm">
-						<!-- type="hidden"은 form태그에 보이지는 않지만
-						값을 같이 넘겨야 할때 사용합니다.
-						값을 넘길때 가장중요한 프로퍼티는 name 이다. -->
-						<input type="hidden" name="id" value="${vo.id }">
-						<!-- required : 반드시 작성되어야 한다는 의미 -->
-						<!-- pattern ^로 시작해서 $로 끝난다. -->
-						<!-- .은 \n 빼로 전부 다 사용가능 -->
-						<!-- pw는 3자에서 20자 이내로 써야한다. -->
-						<!-- title의 내용은 툴팁으로 모여준다. -->
-						<input name="pw" required maxlength="20"
-							pattern="^.{3,20}$"
-							title="3~20자 입력 가능"
-							placeHolder="본인 확인용 비밀번호">
-						<button  class="btn btn-danger">탈퇴</button>
-						<button type="button" class="btn btn-success"
-							id="deleteCancelBtn">취소</button>
-					</form>
-        </div>
-      </div>
     </div>
-  </div>
-  
+    
+    <div class="row">
+        <!-- 사이드 메뉴 -->
+        <div class="col-md-3 side-menu">
+            <ul>
+                <li><a href="/myreview/list.do">상품 리뷰</a></li>
+                <li><a href="/myorder/list.do">주문내역</a></li>
+                <li><a href="/qna/list.do">Q&A</a></li>
+                <li><a href="/mycoupon/list.do">쿠폰</a></li>
+                <li><a href="/myrate/list.do">적립금</a></li>
+                <li><a href="/mygiftcard/list.do">상품권</a></li>
+                <li><a href="/member/addr.do">배송지 관리</a></li>
+                <li><a href="/recent/list.do">최근 본 상품</a></li>
+                <li><a href="/member/update.do">개인정보 수정</a></li>
+            </ul>
+        </div>
 
+        <!-- 주문 처리 현황 -->
+        <div class="col-md-9">
+            <div class="order-status">
+                <h3>나의 주문처리 현황 <small>(최근 3개월 기준)</small></h3>
+                <hr>
+                <div>입금 전 <strong>0</strong></div>
+                <div>배송 준비 중 <strong>0</strong></div>
+                <div>배송 중 <strong>0</strong></div>
+                <div>배송 완료 <strong>0</strong></div>
+            </div>
+            <div class="text-right mt-3">
+                <button class="btn btn-secondary">취소/교환/반품 내역</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

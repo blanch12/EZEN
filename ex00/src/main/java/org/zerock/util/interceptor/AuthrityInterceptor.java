@@ -30,7 +30,6 @@ public class AuthrityInterceptor extends HandlerInterceptorAdapter {
 		authMap.put("/member/logout.do", 1);
 		
 		authMap.put("/qna/list.do", 1);
-		authMap.put("/qna/view.do", 1);
 		
 	}
 	
@@ -52,9 +51,8 @@ public class AuthrityInterceptor extends HandlerInterceptorAdapter {
 			LoginVO vo = (LoginVO) session.getAttribute("login");
 			// 로그인 안한 경우
 			if (vo == null) {
-				// 로그인 페이지로 이동시킨다.
-				request.getRequestDispatcher("/WEB-INF/views/error/loginError.jsp")
-					.forward(request, response);
+				// 권한 오류 JSP로 이동시킨다.
+				 response.sendRedirect(request.getContextPath() + "/member/loginForm.do");
 				
 				return false;
 			}

@@ -11,12 +11,7 @@ import org.zerock.util.page.PageObject;
 
 import lombok.Setter;
 
-// 자동생성 어노테이션
-// @Controller, @RestController
-// @Service
-// @Repository
-// @Component
-// @~~Advice
+
 @Service
 @Qualifier("boardReplyServiceImpl")
 public class BoardReplyServiceImpl implements BoardReplyService {

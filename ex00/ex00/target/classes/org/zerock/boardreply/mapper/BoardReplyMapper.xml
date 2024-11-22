@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.boardreply.mapper.BoardReplyMapper">
+
+   <!-- 1. 댓글 총 데이터 개수 조회 -->
+   <select id="getTotalRow" resultType="Long">
+      select count(*)
+      from board_reply
+      where no = #{no} <!-- 특정 게시글(no)에 달린 댓글 개수를 조회 -->
+   </select>
+
+   <!-- 2. 댓글 리스트 조회 -->
+   <select id="list" resultType="org.zerock.boardreply.vo.BoardReplyVO">
+      select rno, no, content, id, name, writeDate
+      from
+      (
+         select rownum rnum, rno, no, content, id, name, writeDate
+         from
+         (
+            select b.rno, b.no, b.content, b.id, m.name, b.writeDate
+            from board_reply b, member m
+            where
+               (no = #{no}) <!-- 게시글 번호로 댓글 조회 -->
+               and (b.id = m.id) <!-- 댓글 작성자(id)와 회원 테이블의 id를 조인하여 회원 이름을 가져옴 -->
+            order by rno desc <!-- 댓글 번호를 기준으로 내림차순 정렬 -->
+         )
+      )
+      where rnum between #{pageObject.startRow} and #{pageObject.endRow} <!-- 페이징 처리 -->
+   </select>
+
+   <!-- 3. 댓글 작성 쿼리 -->
+   <insert id="write">
+      <!-- BoardReplyVO 객체의 'rno'를 시퀀스로 생성하여 댓글 번호(rno) 설정 -->
+      <selectKey keyProperty="rno" resultType="Long" order="BEFORE">
+         select board_reply_seq.nextval from dual <!-- board_reply_seq 시퀀스를 사용하여 댓글 번호 생성 -->
+      </selectKey>
+      insert into board_reply(rno, no, content, id)
+      values(#{rno}, #{no}, #{content}, #{id}) <!-- 댓글 내용(content)과 게시글 번호(no), 작성자(id)를 삽입 -->
+   </insert>
+
+   <!-- 4. 댓글 수정 쿼리 -->
+   <update id="update">
+      <!-- <![CDATA[]]> 사용하여 특수문자 처리 -->
+      <![CDATA[
+      update board_reply
+      set content = #{content} <!-- 댓글 내용 수정 -->
+      where rno = #{rno} and id = #{id} <!-- 댓글 번호(rno)와 작성자(id)로 특정 댓글 수정 -->
+      ]]>
+   </update>
+
+   <!-- 5. 댓글 삭제 쿼리 -->
+   <delete id="delete">
+      delete from board_reply
+      where rno = #{rno} and id = #{id} <!-- 댓글 번호(rno)와 작성자(id)로 특정 댓글 삭제 -->
+   </delete>
+
+</mapper>

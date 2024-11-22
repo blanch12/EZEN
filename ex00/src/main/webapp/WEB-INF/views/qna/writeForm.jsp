@@ -4,12 +4,31 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>QnA 등록 폼</title>
+<title>QnA 등록</title>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- datepicker: jquery는 bootstrap에서 정의한 라이브러리 사용 -->
+<link rel="stylesheet"
+	href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/styles/reset.css?after">
+<link rel="stylesheet" href="/resources/styles/common.css?after">
+<link rel="stylesheet" href="/resources/styles/root.css?after">
+<link rel="stylesheet" href="/resources/styles/reponsive.css?after">
+<style>
+.container {
+	padding-top : 130px;
+}
+</style>
 </head>
 <body>
-
 <div class="container">
-  <h2><i class="fa fa-edit"></i> QnA 글 등록 폼</h2>
+  <h2><i class="fa fa-edit"></i> QnA 글 등록</h2>
+  <br>
   <form action="write.do" method="post" enctype="multipart/form-data">
   	<input type="hidden" name="perPageNum" value="${param.perPageNum }">
     <div class="form-group">
@@ -28,6 +47,11 @@
       <label for="imageName">첨부이미지</label>
       <input type="file" class="form-control" id="imageName"
       	name="imageName">
+    </div>
+    <div class="custom-control custom-checkbox mb-3">
+      <input type="checkbox" class="custom-control-input" id="customCheck" name="secret"
+      value="1">
+      <label class="custom-control-label" for="customCheck">비밀 글</label>
     </div>
     <button type="submit" class="btn btn-primary">등록</button>
     <button type="reset" class="btn btn-secondary">새로입력</button>

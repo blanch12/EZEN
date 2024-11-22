@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="org.zerock.brands.mapper.BrandsMapper">
+  	<!-- 상품 리스트 -->
+  	<select id="list" resultType="org.zerock.brands.vo.BrandsVO">
+  		select
+	  		brands_no, brands_cate_name ,brands_name, price, discount,
+	  		discount_rate, sale_price, saved_rate, brands_image_name 
+  		from
+  		(
+	  		select
+	  			rownum rnum, brands_no, brands_cate_name ,brands_name, price, discount,
+	  			discount_rate, sale_price, saved_rate, brands_image_name
+	  		from
+		  	(
+		  		select
+		  			g.brands_no, g.brands_cate_name, g.brands_name, p.price, p.discount,
+		  			p.discount_rate, p.sale_price, p.saved_rate, g.brands_image_name
+		  		from
+		  			brands g, brands_price p
+		  		where
+		  		(
+		  	
+		  			<include refid="search" />
+
+		  			<![CDATA[
+		  			sale_start_date <= sysDate and
+		  			trunc(sysDate) <= sale_end_date
+		  			]]>
+		  		)
+		  		and
+		  		(
+		  	
+		  			g.brands_no = p.brands_no
+		  		)
+		  	)
+	  	)
+	  	where rnum between #{pageObject.startRow} and #{pageObject.endRow}
+  	</select>
+  	
+
+  	<select id="getTotalRow" resultType="Long">
+  		select count(*)
+  		from brands g, brands_price p
+  		where
+  		(
+  	
+ 			<include refid="search" />
+
+		  	<![CDATA[
+		  	sale_start_date <= sysDate and
+		  	trunc(sysDate) <= sale_end_date
+		  	]]>
+		)
+		and
+		(
+		
+			g.brands_no = p.brands_no
+		)
+  	</select>
+  	
+
+  	<sql id="search">
+  		<trim prefixOverrides="and" suffix="and">
+  	
+	  	 	<if test="brandsSearchVO.brands_cate_code1 != null and brandsSearchVO.brands_cate_code1 != 0">
+	  			and brands_cate_code1 = ${brandsSearchVO.brands_cate_code1}
+	  			<if test="brandsSearchVO.brands_cate_code2 != null and brandsSearchVO.brands_cate_code2 != 0">
+	  				and brands_cate_code2 = ${brandsSearchVO.brands_cate_code2}
+	  			</if>
+			</if>
+		
+			<if test="brandsSearchVO.brands_name != null and brandsSearchVO.brands_name != ''.toString()">
+				and brands_name like '%' || #{brandsSearchVO.brands_name} || '%'
+			</if>
+		
+			<if test="brandsSearchVO.min_price != null and brandsSearchVO.min_price != 0">
+				<![CDATA[
+				and sale_price >= #{brandsSearchVO.min_price}
+				]]>
+			</if>
+		
+			<if test="brandsSearchVO.max_price != null and brandsSearchVO.max_price != 0">
+				<![CDATA[
+				and sale_price <= #{brandsSearchVO.max_price}
+				]]>
+			</if>
+		</trim>
+  	</sql>
+  	
+  	
+
+  	<select id="getBrandsCategory" resultType="org.zerock.brandscategory.vo.BrandsCategoryVO">
+  		select
+  			brands_cate_code1, brands_cate_code2, brands_cate_name
+  		from
+  			brands_category
+  		where
+  		
+  			<if test="brands_cate_code1 == 0">
+  				brands_cate_code2 = 0
+  			</if>
+  	
+  			<if test="brands_cate_code1 > 0">
+  				brands_cate_code1 = #{brands_cate_code1} and brands_cate_code2 != 0
+  			</if>
+  	</select>
+  	
+
+  	<select id="view" resultType="org.zerock.brands.vo.BrandsVO">
+  		select
+			g.brands_no, g.brands_cate_name, g.brands_name,  g.brands_cate_code1, 
+			g.brands_cate_code2, g.brands_image_name, c.brands_cate_name,
+			g.content, g.company, g.product_date,
+			p.price, p.discount, p.discount_rate, 
+			p.sale_price, p.saved_rate, p.delivery_charge, 
+			p.sale_start_date, p.sale_end_date,
+			p.brands_price_no
+
+  		from brands g, brands_price p, brands_category c
+  		where
+ 
+  			(g.brands_no = #{brands_no})
+  			<![CDATA[
+		  	and ( 
+		  	sale_start_date <= sysDate and
+		  	trunc(sysDate) <= sale_end_date
+		  	)
+		  	]]>
+  	
+  			and (g.brands_no = p.brands_no)
+  			and (g.brands_cate_code1 = c.brands_cate_code1 and g.brands_cate_code2 = c.brands_cate_code2)
+  	</select>
+  	
+
+  	<select id="sizeList" resultType="org.zerock.brands.vo.BrandsSizeVO">
+  		select brands_size_no, brands_size_name, brands_no
+  		from brands_size
+  		where brands_no = #{brands_no}
+  	</select>
+  	<!-- 상품 컬러 리스트 -->
+  	<select id="colorList" resultType="org.zerock.brands.vo.BrandsColorVO">
+  		select brands_color_no, brands_color_name, brands_no
+  		from brands_color
+  		where brands_no = #{brands_no}
+  	</select>
+  	<!-- 상품 이미지 리스트 -->
+  	<select id="imageList" resultType="org.zerock.brands.vo.BrandsImageVO">
+  		select brands_image_no, brands_image_name, brands_no
+  		from brands_image
+  		where brands_no = #{brands_no}
+  	</select>
+  	
+  	<insert id="write">
+  		<selectKey keyProperty="brands_no" resultType="Long" order="BEFORE">
+  			select brands_seq.nextval from dual
+  		</selectKey>
+  		insert into brands
+  			(brands_no, brands_cate_name ,brands_name,
+  			brands_cate_code1, brands_cate_code2, brands_image_name,
+  			content, company, product_date)
+  		values
+	  		(#{brands_no}, #{brands_cate_name} , #{brands_name}, #{brands_cate_code1},
+	  		#{brands_cate_code2}, #{brands_image_name}, #{content},
+	  		#{company}, #{product_date,jdbcType=DATE})
+  	</insert>
+
+	<!-- 가격 정보 등록 -->
+	<insert id="writePrice">
+		insert into brands_price
+			(brands_price_no, price, discount, discount_rate,
+			 sale_price, saved_rate, delivery_charge
+			<if test="sale_start_date != null">
+			, sale_start_date
+			</if>
+			<if test="sale_end_date != null">
+			, sale_end_date
+			</if>
+			, brands_no)
+		values
+			(brands_price_seq.nextval, #{price},
+			#{discount,jdbcType=INTEGER}, #{discount_rate,jdbcType=INTEGER},
+			#{sale_price},
+			#{saved_rate,jdbcType=INTEGER}, #{delivery_charge,jdbcType=INTEGER}
+			<if test="sale_start_date != null">
+				, #{sale_start_date,jdbcType=DATE}
+			</if>
+			<if test="sale_end_date != null">
+				, #{sale_end_date,jdbcType=DATE}
+			</if>	
+			, #{brands_no})
+				
+	</insert>
+	<insert id="writeImage">
+		insert into brands_image
+			(brands_image_no, brands_image_name, brands_no)
+		values
+			(brands_image_seq.nextval, #{brands_image_name}, #{brands_no})
+	</insert>
+	<insert id="writeSize">
+		insert into brands_size
+			(brands_size_no, brands_size_name, brands_no)
+		values
+			(brands_size_seq.nextval, #{brands_size_name}, #{brands_no})
+	</insert>
+
+	<insert id="writeColor">
+		insert into brands_color
+			(brands_color_no, brands_color_name, brands_no)
+		select brands_color_seq.nextval, brands_color_name, brands_no from 
+		(
+		<foreach collection="list" item="vo" separator=" union all ">
+			select #{vo.brands_color_name} brands_color_name, #{vo.brands_no} brands_no from dual
+		</foreach>
+		)
+	</insert>
+	
+	<update id="update">
+		update brands set
+			brands_cate_code1 = #{brands_cate_code1}, brands_cate_code2 = #{brands_cate_code2},
+			brands_name = #{brands_name}, company = #{company},
+			content = #{content}, product_date = #{product_date}
+		where 
+			brands_no = #{brands_no}
+	</update>
+
+	<update id="updatePrice">
+		update brands_price set
+			price = #{price}, discount = #{discount},
+			discount_rate = #{discount_rate},
+			sale_price = #{sale_price}, saved_rate = #{saved_rate},
+			delivery_charge = #{delivery_charge},
+			sale_start_date = #{sale_start_date},
+			sale_end_date = #{sale_end_date}
+		where
+			brands_no = #{brands_no} and brands_price_no = #{brands_price_no}
+	</update>
+	
+
+	<delete id="deleteSize">
+		delete from brands_size
+		where brands_no = #{brands_no}
+	</delete>
+
+	<delete id="deleteColor">
+		delete from brands_color
+		where brands_no = #{brands_no}
+	</delete>
+
+	<delete id="deleteImage">
+		delete from brands_image
+		where brands_image_name = #{brands_image_name}
+	</delete>
+	
+		<!-- 삭제  -->
+		<delete id="delete">
+		delete from brands
+		where brands_no = #{brands_no} 
+	</delete>
+  </mapper>
+  
+  
+  
+  
+  
+  

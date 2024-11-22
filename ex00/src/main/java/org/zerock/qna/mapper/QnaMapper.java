@@ -2,7 +2,6 @@ package org.zerock.qna.mapper;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.zerock.qna.vo.QnaVO;
 import org.zerock.util.page.PageObject;
@@ -18,13 +17,13 @@ public interface QnaMapper {
 	
 	public QnaVO view(Long no);
 	
-	public Integer viewStatus(QnaVO vo);
-	
-	public List<QnaVO> ownList(PageObject pageObject,@Param("id") String id);
-	
 	public Integer update(QnaVO vo);
 	
 	public Integer delete(QnaVO vo);
 	
 	public Integer deleteImage(QnaVO vo);
+	
+	public Integer writeReply(QnaVO vo);
+	
+	public Integer changeStatus(QnaVO vo);
 }

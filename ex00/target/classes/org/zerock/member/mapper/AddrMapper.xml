@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.member.mapper.AddrMapper">
+
+    <!-- 모든 주소 조회 -->
+	<select id="getAllAddrs" parameterType="String" resultType="org.zerock.member.vo.AddrVO">
+	    SELECT 
+	        ID,
+	        MEMBERID, 
+	        ADDRNAME AS addrName,
+	        RECIPIENT_NAME AS recipientName,
+	        PHONE_NUMBER AS phoneNumber,
+	        ADDR || ' ' || ADDRDETAIL AS fullAddr,
+	        POSTALCODE, 
+	        ISDEFAULT
+	    FROM ADDR
+	    WHERE MEMBERID = #{memberId}
+	    ORDER BY ISDEFAULT DESC, ID ASC
+	</select>
+
+    <!-- 새로운 주소 추가 -->
+    <insert id="insertAddr" parameterType="org.zerock.member.vo.AddrVO">
+        <!-- 기본 키 자동 생성 -->
+        <selectKey keyProperty="id" resultType="int" order="BEFORE">
+            SELECT SEQ_ADDR.NEXTVAL AS id FROM DUAL
+        </selectKey>
+        
+        INSERT INTO addr (
+		    ID,
+		    MEMBERID, 
+		    ADDR, 
+		    ADDRNAME,
+		    ADDRDETAIL, 
+		    POSTALCODE, 
+		    ISDEFAULT,
+		    RECIPIENT_NAME,
+		    PHONE_NUMBER,
+		    FULLADDR
+		)
+		VALUES (
+		    #{id}, 
+		    #{memberId, jdbcType=VARCHAR}, 
+		    #{addr, jdbcType=VARCHAR},
+		    #{addrName, jdbcType=VARCHAR}, 
+		    #{addrDetail, jdbcType=VARCHAR},   <!-- 수정된 부분 -->
+		    #{postalCode, jdbcType=VARCHAR}, 
+		    #{isDefault, jdbcType=VARCHAR},
+		    #{recipientName, jdbcType=VARCHAR},
+		    #{phoneNumber, jdbcType=VARCHAR},
+		    #{fullAddr, jdbcType=VARCHAR}      <!-- 수정된 부분 -->
+		)
+	</insert>
+	
+	<!-- 기존 기본 주소를 'N'으로 설정 -->
+	<update id="updateExistingDefault" parameterType="String">
+	    UPDATE ADDR
+	    SET ISDEFAULT = 'N'
+	    WHERE MEMBERID = #{memberId}
+	</update>
+	
+	<!-- 특정 주소를 기본 주소('Y')로 설정 -->
+	<update id="setDefaultAddr" parameterType="map">
+	    UPDATE ADDR
+	    SET ISDEFAULT = 'Y'
+	    WHERE ID = #{addrId} AND MEMBERID = #{memberId}
+	</update>
+	
+	<!-- 특정 주소 조회 -->
+    <select id="getAddrById" parameterType="int" resultType="org.zerock.member.vo.AddrVO">
+	    SELECT 
+	        ID,
+	        MEMBERID,
+	        ADDRNAME,
+	        RECIPIENT_NAME AS recipientName,
+	        PHONE_NUMBER AS phoneNumber,
+	        POSTALCODE,
+	        ADDR,
+	        ADDRDETAIL,
+	        ISDEFAULT
+	    FROM ADDR
+	    WHERE ID = #{id}
+	</select>
+
+
+    <!-- 주소 업데이트 -->
+    <update id="updateAddr" parameterType="org.zerock.member.vo.AddrVO">
+	    UPDATE ADDR
+	    SET 
+	        ADDRNAME = #{addrName, jdbcType=VARCHAR},
+	        RECIPIENT_NAME = #{recipientName, jdbcType=VARCHAR},
+	        PHONE_NUMBER = #{phoneNumber, jdbcType=VARCHAR},
+	        POSTALCODE = #{postalCode, jdbcType=VARCHAR},
+	        ADDR = #{addr, jdbcType=VARCHAR},
+	        ADDRDETAIL = #{addrDetail, jdbcType=VARCHAR},
+	        ISDEFAULT = #{isDefault, jdbcType=VARCHAR},  <!-- isDefault에 Y/N 전달 -->
+	        FULLADDR = #{addr} || ' ' || #{addrDetail}
+	    WHERE ID = #{id, jdbcType=INTEGER}
+	</update>
+
+
+    <!-- 주소 삭제 -->
+    <delete id="deleteAddr" parameterType="map">
+	    DELETE FROM ADDR
+	    WHERE ID = #{id} AND MEMBERID = #{memberId}
+	</delete>
+
+    
+    </mapper>

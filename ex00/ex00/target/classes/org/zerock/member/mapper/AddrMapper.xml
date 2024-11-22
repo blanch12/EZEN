@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.member.mapper.AddrMapper">
+
+    <!-- 모든 주소 조회: 해당 사용자의 모든 주소 정보를 조회 -->
+    <select id="getAllAddrs" parameterType="String" resultType="org.zerock.member.vo.AddrVO">
+        SELECT 
+            ID,
+            MEMBERID, 
+            ADDRNAME AS addrName,  <!-- 주소 이름 -->
+            RECIPIENT_NAME AS recipientName,  <!-- 수신자 이름 -->
+            PHONE_NUMBER AS phoneNumber,  <!-- 전화번호 -->
+            ADDR || ' ' || ADDRDETAIL AS fullAddr,  <!-- 전체 주소 (주소 + 상세 주소) -->
+            POSTALCODE,  <!-- 우편번호 -->
+            ISDEFAULT  <!-- 기본 주소 여부 -->
+        FROM ADDR
+        WHERE MEMBERID = #{memberId}  <!-- 특정 사용자 ID에 해당하는 주소 조회 -->
+        ORDER BY ISDEFAULT DESC, ID ASC  <!-- 기본 주소를 최우선으로 표시하고, 그 외는 ID순으로 정렬 -->
+    </select>
+
+    <!-- 새로운 주소 추가: 사용자에게 새로운 주소를 추가 -->
+    <insert id="insertAddr" parameterType="org.zerock.member.vo.AddrVO">
+        <!-- 기본 키 자동 생성 -->
+        <selectKey keyProperty="id" resultType="int" order="BEFORE">
+            SELECT SEQ_ADDR.NEXTVAL AS id FROM DUAL  <!-- 시퀀스를 이용해 새로운 주소 ID 생성 -->
+        </selectKey>
+        
+        INSERT INTO addr (
+            ID,
+            MEMBERID, 
+            ADDR, 
+            ADDRNAME,
+            ADDRDETAIL, 
+            POSTALCODE, 
+            ISDEFAULT,
+            RECIPIENT_NAME,
+            PHONE_NUMBER,
+            FULLADDR
+        )
+        VALUES (
+            #{id},  <!-- 자동 생성된 ID -->
+            #{memberId, jdbcType=VARCHAR},  <!-- 사용자 ID -->
+            #{addr, jdbcType=VARCHAR},  <!-- 기본 주소 -->
+            #{addrName, jdbcType=VARCHAR},  <!-- 주소 이름 -->
+            #{addrDetail, jdbcType=VARCHAR},  <!-- 상세 주소 -->
+            #{postalCode, jdbcType=VARCHAR},  <!-- 우편번호 -->
+            #{isDefault, jdbcType=VARCHAR},  <!-- 기본 주소 여부 (Y/N) -->
+            #{recipientName, jdbcType=VARCHAR},  <!-- 수신자 이름 -->
+            #{phoneNumber, jdbcType=VARCHAR},  <!-- 전화번호 -->
+            #{fullAddr, jdbcType=VARCHAR}  <!-- 전체 주소 (주소 + 상세 주소) -->
+        )
+    </insert>
+    
+    <!-- 기존 기본 주소를 'N'으로 설정: 새 주소를 기본으로 설정하기 전에 기존 기본 주소를 비기본으로 변경 -->
+    <update id="updateExistingDefault" parameterType="String">
+        UPDATE ADDR
+        SET ISDEFAULT = 'N'  <!-- 기존 기본 주소를 비기본으로 설정 -->
+        WHERE MEMBERID = #{memberId}  <!-- 특정 사용자 ID에 해당하는 주소들 -->
+    </update>
+    
+    <!-- 특정 주소를 기본 주소('Y')로 설정: 사용자가 특정 주소를 기본 주소로 설정 -->
+    <update id="setDefaultAddr" parameterType="map">
+        UPDATE ADDR
+        SET ISDEFAULT = 'Y'  <!-- 해당 주소를 기본 주소로 설정 -->
+        WHERE ID = #{addrId} AND MEMBERID = #{memberId}  <!-- 주소 ID와 사용자 ID로 특정 주소 찾기 -->
+    </update>
+    
+    <!-- 특정 주소 조회: 주소 ID에 해당하는 주소 정보를 조회 -->
+    <select id="getAddrById" parameterType="int" resultType="org.zerock.member.vo.AddrVO">
+        SELECT 
+            ID,
+            MEMBERID,
+            ADDRNAME,  <!-- 주소 이름 -->
+            RECIPIENT_NAME AS recipientName,  <!-- 수신자 이름 -->
+            PHONE_NUMBER AS phoneNumber,  <!-- 전화번호 -->
+            POSTALCODE,  <!-- 우편번호 -->
+            ADDR,  <!-- 기본 주소 -->
+            ADDRDETAIL,  <!-- 상세 주소 -->
+            ISDEFAULT  <!-- 기본 주소 여부 -->
+        FROM ADDR
+        WHERE ID = #{id}  <!-- 특정 주소 ID에 해당하는 정보 조회 -->
+    </select>
+
+    <!-- 주소 업데이트: 기존 주소 정보를 업데이트 -->
+    <update id="updateAddr" parameterType="org.zerock.member.vo.AddrVO">
+        UPDATE ADDR
+        SET 
+            ADDRNAME = #{addrName, jdbcType=VARCHAR},  <!-- 주소 이름 업데이트 -->
+            RECIPIENT_NAME = #{recipientName, jdbcType=VARCHAR},  <!-- 수신자 이름 업데이트 -->
+            PHONE_NUMBER = #{phoneNumber, jdbcType=VARCHAR},  <!-- 전화번호 업데이트 -->
+            POSTALCODE = #{postalCode, jdbcType=VARCHAR},  <!-- 우편번호 업데이트 -->
+            ADDR = #{addr, jdbcType=VARCHAR},  <!-- 기본 주소 업데이트 -->
+            ADDRDETAIL = #{addrDetail, jdbcType=VARCHAR},  <!-- 상세 주소 업데이트 -->
+            ISDEFAULT = #{isDefault, jdbcType=VARCHAR},  <!-- 기본 주소 여부 업데이트 -->
+            FULLADDR = #{addr} || ' ' || #{addrDetail}  <!-- 전체 주소 (주소 + 상세 주소) 업데이트 -->
+        WHERE ID = #{id, jdbcType=INTEGER}  <!-- 특정 주소 ID에 해당하는 주소 업데이트 -->
+    </update>
+
+    <!-- 주소 삭제: 특정 주소를 삭제 -->
+    <delete id="deleteAddr" parameterType="map">
+        DELETE FROM ADDR
+        WHERE ID = #{id} AND MEMBERID = #{memberId}  <!-- 주소 ID와 사용자 ID로 특정 주소 삭제 -->
+    </delete>
+
+</mapper>

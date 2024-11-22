@@ -1,0 +1,9 @@
+1. STS3 다운로드
+2. STS3를 실행해서 workspace 구성
+3. STS3 종료
+4. https-content.xml을
+  워크스페이스폴더\.metadata\.plugins\org.springsource.ide.eclipse.commons.content.core
+  폴더안에 카피
+5. STS3 실행
+6. File-> Spring Legacy Project 클릭
+7. Spring MVC Project 생성가능

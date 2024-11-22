@@ -57,6 +57,8 @@ public class CategoryController {
 		return "category/list";
 	}
 	
+	
+	
 	// 2. 카테고리 등록
 	// 2-1 카테고리 등록 폼
 	// 등록항목이 분류명 밖에 없어서, 리스트에 모달창으로 처리합니다.
@@ -108,6 +110,8 @@ public class CategoryController {
 		
 		return "redirect:list.do?cate_code1=" + vo.getCate_code1();
 	}
+	
+	
 }
 
 

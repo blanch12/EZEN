@@ -50,32 +50,3 @@ public class CartServiceImpl implements CartService {
     }
 	
 }
-//	// 자동 DI
-//	@Setter(onMethod_ = @Autowired)
-//	private CartMapper mapper;
-//	
-//	public List<CartVO> list(PageObject pageObject, Long no) {
-//		// TODO Auto-generated method stub
-//		// 전체 데이터 세팅 - 페이지 처리를 위해서
-//		pageObject.setTotalRow(mapper.getTotalRow(pageObject, no));
-//		return mapper.list(pageObject, no);
-//		return null;
-//	}
-
-//	@Override
-//	public Integer write(CartVO vo) {
-//		// TODO Auto-generated method stub
-//		return mapper.write(vo);
-//	}
-//
-//	@Override
-//	public Integer update(CartVO vo) {
-//		// TODO Auto-generated method stub
-//		return mapper.update(vo);
-//	}
-//
-//	@Override
-//	public Integer delete(CartVO vo) {
-//		// TODO Auto-generated method stub
-//		return mapper.delete(vo);
-//	}

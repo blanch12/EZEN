@@ -4,8 +4,28 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- datepicker: jquery는 bootstrap에서 정의한 라이브러리 사용 -->
+<link rel="stylesheet"
+	href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/styles/reset.css?after">
+<link rel="stylesheet" href="/resources/styles/common.css?after">
+<link rel="stylesheet" href="/resources/styles/root.css?after">
+<link rel="stylesheet" href="/resources/styles/reponsive.css?after">
 <meta charset="UTF-8">
 <title>QnA 수정 폼</title>
+<style>
+.container {
+	padding-top : 130px;
+}
+
+</style>
 <script type="text/javascript">
 $(function() {
 	$("#imageName").on('change',function(){
@@ -35,7 +55,7 @@ $(function() {
 <body>
 
 <div class="container">
-  <h2><i class="fa fa-edit"></i> QnA 글 수정 폼</h2>
+  <h2><i class="fa fa-edit"></i> Q&A 글 수정</h2><br>
   <form action="update.do" method="post" enctype="multipart/form-data">
   	<input type="hidden" name="page" value="${pageObject.page}">
   	<input type="hidden" name="perPageNum" value="${pageObject.perPageNum}">
@@ -54,7 +74,7 @@ $(function() {
     </div>
     <div class="form-group">
     
-    <!-- 기존 이미지 미리보기 및 삭제 버튼 -->
+    
     <label for="imageName">첨부이미지</label>
     <c:if test="${!empty vo.filename}">
         <div>
@@ -62,6 +82,7 @@ $(function() {
              id="existingImage">
         </div>
     <!-- 새로운 파일 선택을 위한 input -->
+    <!-- 기존 파일 존재: 파일변경 버튼 -->
     <div class="filebox">
     <input class="text md-3" id="nameText" value="${vo.filename }" readonly style="height:25px;">
     <label for="imageName" class="btn btn-warning">
@@ -71,6 +92,7 @@ $(function() {
 	</div>
     </c:if>
     
+    <!-- 기존 파일 없음: 파일등록 버튼 -->
     <c:if test="${empty vo.filename}">
     <div class="filebox">
     <input class="text md-3" id="nameText" value="${vo.filename }" readonly style="height:25px;">
@@ -80,7 +102,11 @@ $(function() {
     <input type="file" class="form-control" id="imageName" name="imageName" style="display:none">
 	</div>
     </c:if>
-    
+    <div class="custom-control custom-checkbox mb-3">
+      <input type="checkbox" class="custom-control-input" id="customCheck" name="secret"
+      value="1" ${(vo.secret == 1)?"checked":"" }>
+      <label class="custom-control-label" for="customCheck">비밀 글</label>
+    </div>
 </div>
     <button type="submit" class="btn btn-primary">등록</button>
     <button type="reset" class="btn btn-secondary">새로입력</button>

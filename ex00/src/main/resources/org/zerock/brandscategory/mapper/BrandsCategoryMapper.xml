@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="org.zerock.brandscategory.mapper.BrandsCategoryMapper">
+
+  <select id="list" resultType="org.zerock.brandscategory.vo.BrandsCategoryVO">
+  	select brands_cate_code1, brands_cate_code2, brands_cate_name
+  	from brands_category
+  	<trim prefix="where">
+
+	  	<if test="brands_cate_code1 == 0">
+	  		brands_cate_code2 = 0
+	  	</if>
+
+	  	<if test="brands_cate_code1 > 0">
+	  		brands_cate_code2 > 0 and brands_cate_code1 = #{brands_cate_code1} 
+	  	</if>
+  	</trim>
+  	order by brands_cate_code1, brands_cate_code2
+  </select>
+  
+
+  	<insert id="writeBig">
+  		insert into brands_category(brands_cate_code1, brands_cate_name)
+  		values(
+  			(select NVL(max(brands_cate_code1),0) + 1 from brands_category),
+  			#{brands_cate_name}
+  		)
+  	</insert>
+
+
+  	<insert id="writeMid">
+  		insert into brands_category(brands_cate_code1, brands_cate_code2, brands_cate_name)
+  		values(
+  			#{brands_cate_code1},
+  			(select NVL(max(brands_cate_code2),0) + 1
+  				from brands_category where brands_cate_code1 = #{brands_cate_code1}),
+  			#{brands_cate_name}
+  		)
+  	</insert>
+  	
+
+  	<update id="update">
+  		update brands_category
+  		set brands_cate_name = #{brands_cate_name}
+  		where brands_cate_code1 = #{brands_cate_code1}
+  			and brands_cate_code2 = #{brands_cate_code2}
+  	</update>
+  	
+
+	<delete id="delete">
+		delete from brands_category
+		where brands_cate_code1 = #{brands_cate_code1}
+		<if test="brands_cate_code2 != 0">
+  			and brands_cate_code2 = #{brands_cate_code2}
+  		</if>	
+	</delete>
+
+
+
+
+  </mapper>
+  
+  
+  
+  
+  
+  

@@ -2,6 +2,22 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- qnareply.jsp -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- datepicker: jquery는 bootstrap에서 정의한 라이브러리 사용 -->
+<link rel="stylesheet"
+	href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+
+<link rel="stylesheet" href="/resources/styles/reset.css?after">
+<link rel="stylesheet" href="/resources/styles/common.css?after">
+<link rel="stylesheet" href="/resources/styles/root.css?after">
+<link rel="stylesheet" href="/resources/styles/main.css?after">
+<link rel="stylesheet" href="/resources/styles/reponsive.css?after">
 <div class="row" style="margin : 40px -10px 0 -10px">
 	<div class="col-lg-12">
 		<!-- card -->

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.brandscategory.mapper.BrandsCategoryMapper">
+
+   <!-- 브랜드 카테고리 리스트 조회 -->
+   <select id="list" resultType="org.zerock.brandscategory.vo.BrandsCategoryVO">
+      select brands_cate_code1, brands_cate_code2, brands_cate_name
+      from brands_category
+      <trim prefix="where">
+         <!-- brands_cate_code1이 0일 때 브랜드 카테고리 코드2가 0인 경우 조회 -->
+         <if test="brands_cate_code1 == 0">
+            brands_cate_code2 = 0
+         </if>
+         <!-- brands_cate_code1이 0보다 큰 경우 코드1과 코드2 조건을 추가 -->
+         <if test="brands_cate_code1 > 0">
+            brands_cate_code2 > 0 and brands_cate_code1 = #{brands_cate_code1}
+         </if>
+      </trim>
+      <!-- 브랜드 카테고리 코드1, 코드2 순으로 정렬 -->
+      order by brands_cate_code1, brands_cate_code2
+   </select>
+
+   <!-- 대분류 브랜드 카테고리 추가 -->
+   <insert id="writeBig">
+      insert into brands_category(brands_cate_code1, brands_cate_name)
+      values(
+         (select NVL(max(brands_cate_code1), 0) + 1 from brands_category), <!-- 대분류 코드1을 자동으로 증가시킴 -->
+         #{brands_cate_name}
+      )
+   </insert>
+
+   <!-- 중분류 브랜드 카테고리 추가 -->
+   <insert id="writeMid">
+      insert into brands_category(brands_cate_code1, brands_cate_code2, brands_cate_name)
+      values(
+         #{brands_cate_code1}, <!-- 대분류 코드1 -->
+         (select NVL(max(brands_cate_code2), 0) + 1 from brands_category where brands_cate_code1 = #{brands_cate_code1}), <!-- 중분류 코드2를 자동으로 증가시킴 -->
+         #{brands_cate_name}
+      )
+   </insert>
+
+   <!-- 브랜드 카테고리 수정 -->
+   <update id="update">
+      update brands_category
+      set brands_cate_name = #{brands_cate_name} <!-- 카테고리 이름만 수정 -->
+      where brands_cate_code1 = #{brands_cate_code1}
+        and brands_cate_code2 = #{brands_cate_code2}
+   </update>
+
+   <!-- 브랜드 카테고리 삭제 -->
+   <delete id="delete">
+      delete from brands_category
+      where brands_cate_code1 = #{brands_cate_code1}
+      <!-- 중분류 코드2가 존재할 경우 추가 조건을 걸어줌 -->
+      <if test="brands_cate_code2 != 0">
+         and brands_cate_code2 = #{brands_cate_code2}
+      </if>
+   </delete>
+
+</mapper>

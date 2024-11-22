@@ -4,25 +4,20 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="org.zerock.qna.mapper.QnaMapper">
   
+  <!-- QNA 글보기 처리 -->
+  <!-- rno desc 정렬과 no asc 정렬로 본글 밑에 답변이 오게 정렬 -->
   <select id="list" resultType="org.zerock.qna.vo.QnaVO">
-  	select no, title, writer, writeDate, status
+  	select no, rno, ans, title, writer, writeDate, status, parent_writer, secret
   	from (
-	  	select rownum rnum, no, title, writer, writeDate, status
+	  	select rownum rnum, no, rno, ans, title, writer, writeDate, status, parent_writer, secret
 	  	from (
-	  		select no, title, writer, writeDate, status
+	  		select no, rno, title, ans, writer, writeDate, status, parent_writer, secret
 	  		from qna
 	  		<include refid="search"></include>
-	  		order by no desc
+	  		order by rno desc, no asc
 	  	)
   	)
   	where rnum between #{startRow} and #{endRow}
-  </select>
-  <select id="ownList" resultType="org.zerock.qna.vo.QnaVO">
-  	select q.no, q.title, q.writer, q.writeDate, q.status, m.id
-  	from qna q, member m
-  	where (q.writer = #{id}) and (q.writer = m.id)
-  	order by no desc
-  	
   </select>
   
   <select id="getTotalRow" resultType="Long">
@@ -54,40 +49,55 @@
 	</if> 	
   	</sql>
   
+  <!-- QNA 글보기 -->
+  <!-- jsp 처리를 위해 ans도 select -->
   <select id="view" resultType="org.zerock.qna.vo.QnaVO">
-  	select q.no, q.title, q.content, q.filename, q.writer, q.writeDate, q.status
+  	select q.no, q.rno, q.ans, q.title, q.content, q.filename, q.writer, q.writeDate, q.status, q.secret
   	from qna q, member m
   	where 
   	(q.no = #{no})
   	and (q.writer = m.id)
   </select>
   
+  <!-- QNA 글쓰기 -->
   <insert id="write">
   	insert into qna
-	(no, title, content, writer, filename)
-	values (qna_seq.nextval, #{title}, #{content}, #{writer}, #{filename})
+	(no, rno, title, content, writer, filename, secret)
+	values (qna_seq.nextval, qna_seq.nextval, #{title}, #{content}, #{writer}, #{filename, jdbcType=VARCHAR}, #{secret})
   </insert>
+  
+  <!-- QNA 글수정 -->
   <update id="update">
   	update qna
   	set
-  	title = #{title}, content = #{content}, filename = #{filename, jdbcType=VARCHAR}
-  	where no = #{no}
-  </update>
-  <update id="viewStatus">
-  	update qna
-  	set status = '확인'
+  	title = #{title}, content = #{content}, filename = #{filename, jdbcType=VARCHAR}, secret = #{secret}
   	where no = #{no}
   </update>
   
+  <!-- QNA 글삭제 -->
   <delete id="delete">
   delete from qna
   where no = #{no}
   </delete>
   
+  <!-- QNA 글수정 중 이미지 변경처리 -->
   <update id="deleteImage">
   update qna
   set filename = null
   where no = #{no}
+  </update>
+  
+  <!-- QNA 답변 작성 -->
+  <insert id="writeReply">
+  	insert into qna
+	(rno, no, title, content, writer, filename, ans, parent_writer, secret)
+	values (#{no}, qna_seq.nextval, #{title}, #{content}, #{writer}, #{filename, jdbcType=VARCHAR}, 1, #{parent_writer}, #{secret})
+  </insert>
+  
+  <!-- QNA 글상태 처리 -->
+  <update id="changeStatus">
+  	update qna
+  	set status = #{status} where no = #{no}
   </update>
   
   </mapper>

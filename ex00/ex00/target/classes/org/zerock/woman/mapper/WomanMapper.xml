@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.woman.mapper.WomanMapper">
+
+  <!-- 상품 리스트 조회 -->
+  <select id="list" resultType="org.zerock.woman.vo.WomanVO">
+    select
+      woman_no, woman_cate_name, woman_name, price, discount,
+      discount_rate, sale_price, saved_rate, woman_image_name
+    from
+    (
+      select
+        rownum rnum, woman_no, woman_cate_name, woman_name, price, discount,
+        discount_rate, sale_price, saved_rate, woman_image_name
+      from
+      (
+        select
+          g.woman_no, g.woman_cate_name, g.woman_name, p.price, p.discount,
+          p.discount_rate, p.sale_price, p.saved_rate, g.woman_image_name
+        from
+          woman g, woman_price p
+        where
+          (
+            <!-- 검색 조건 포함 -->
+            <include refid="search" />
+            <!-- 일반 조건 (판매중인 상품만) -->
+            <![CDATA[
+            sale_start_date <= sysDate and
+            trunc(sysDate) <= sale_end_date
+            ]]>
+          )
+          and
+          (
+            <!-- 조인 조건 -->
+            g.woman_no = p.woman_no
+          )
+      )
+    )
+    where rnum between #{pageObject.startRow} and #{pageObject.endRow}
+  </select>
+
+  <!-- 전체 상품 개수 조회 -->
+  <select id="getTotalRow" resultType="Long">
+    select count(*)
+    from woman g, woman_price p
+    where
+      (
+        <!-- 검색 조건 포함 -->
+        <include refid="search" />
+        <!-- 일반 조건 (판매중인 상품만) -->
+        <![CDATA[
+        sale_start_date <= sysDate and
+        trunc(sysDate) <= sale_end_date
+        ]]>
+      )
+      and
+      (
+        <!-- 조인 조건 -->
+        g.woman_no = p.woman_no
+      )
+  </select>
+
+  <!-- 검색 조건 정의 -->
+  <sql id="search">
+    <trim prefixOverrides="and" suffix="and">
+      <!-- 카테고리 대분류, 중분류 검색 -->
+      <if test="womanSearchVO.woman_cate_code1 != null and womanSearchVO.woman_cate_code1 != 0">
+        and woman_cate_code1 = ${womanSearchVO.woman_cate_code1}
+        <if test="womanSearchVO.woman_cate_code2 != null and womanSearchVO.woman_cate_code2 != 0">
+          and woman_cate_code2 = ${womanSearchVO.woman_cate_code2}
+        </if>
+      </if>
+      <!-- 제품명 검색 -->
+      <if test="womanSearchVO.woman_name != null and womanSearchVO.woman_name != ''.toString()">
+        and woman_name like '%' || #{womanSearchVO.woman_name} || '%'
+      </if>
+      <!-- 가격 범위 (최소, 최대 가격) -->
+      <if test="womanSearchVO.min_price != null and womanSearchVO.min_price != 0">
+        <![CDATA[
+        and sale_price >= #{womanSearchVO.min_price}
+        ]]>
+      </if>
+      <if test="womanSearchVO.max_price != null and womanSearchVO.max_price != 0">
+        <![CDATA[
+        and sale_price <= #{womanSearchVO.max_price}
+        ]]>
+      </if>
+    </trim>
+  </sql>
+
+  <!-- 카테고리 대분류 및 중분류 가져오기 -->
+  <select id="getWomanCategory" resultType="org.zerock.womancategory.vo.WomanCategoryVO">
+    select
+      woman_cate_code1, woman_cate_code2, woman_cate_name
+    from
+      woman_category
+    where
+      <!-- 대분류 조건 -->
+      <if test="woman_cate_code1 == 0">
+        woman_cate_code2 = 0
+      </if>
+      <!-- 중분류 조건 -->
+      <if test="woman_cate_code1 > 0">
+        woman_cate_code1 = #{woman_cate_code1} and woman_cate_code2 != 0
+      </if>
+  </select>
+
+  <!-- 상품 상세 보기 -->
+  <select id="view" resultType="org.zerock.woman.vo.WomanVO">
+    select
+      g.woman_no, g.woman_cate_name, g.woman_name, g.woman_cate_code1, 
+      g.woman_cate_code2, g.woman_image_name, c.woman_cate_name,
+      g.content, g.company, g.product_date,
+      p.price, p.discount, p.discount_rate, 
+      p.sale_price, p.saved_rate, p.delivery_charge, 
+      p.sale_start_date, p.sale_end_date,
+      p.woman_price_no
+    from woman g, woman_price p, woman_category c
+    where
+      <!-- 상품 번호로 상품 조회 -->
+      (g.woman_no = #{woman_no})
+      <![CDATA[
+      and ( 
+      sale_start_date <= sysDate and
+      trunc(sysDate) <= sale_end_date
+      )
+      ]]>
+      <!-- 조인 조건 -->
+      and (g.woman_no = p.woman_no)
+      and (g.woman_cate_code1 = c.woman_cate_code1 and g.woman_cate_code2 = c.woman_cate_code2)
+  </select>
+
+  <!-- 상품 사이즈 리스트 조회 -->
+  <select id="sizeList" resultType="org.zerock.woman.vo.WomanSizeVO">
+    select woman_size_no, woman_size_name, woman_no
+    from woman_size
+    where woman_no = #{woman_no}
+  </select>
+
+  <!-- 상품 컬러 리스트 조회 -->
+  <select id="colorList" resultType="org.zerock.woman.vo.WomanColorVO">
+    select woman_color_no, woman_color_name, woman_no
+    from woman_color
+    where woman_no = #{woman_no}
+  </select>
+
+  <!-- 상품 이미지 리스트 조회 -->
+  <select id="imageList" resultType="org.zerock.woman.vo.WomanImageVO">
+    select woman_image_no, woman_image_name, woman_no
+    from woman_image
+    where woman_no = #{woman_no}
+  </select>
+
+  <!-- 상품 등록 -->
+  <insert id="write">
+    <selectKey keyProperty="woman_no" resultType="Long" order="BEFORE">
+      select woman_seq.nextval from dual
+    </selectKey>
+    insert into woman
+      (woman_no, woman_cate_name, woman_name,
+      woman_cate_code1, woman_cate_code2, woman_image_name,
+      content, company, product_date)
+    values
+      (#{woman_no}, #{woman_cate_name}, #{woman_name}, #{woman_cate_code1},
+      #{woman_cate_code2}, #{woman_image_name}, #{content},
+      #{company}, #{product_date,jdbcType=DATE})
+  </insert>
+
+  <!-- 가격 정보 등록 -->
+  <insert id="writePrice">
+    insert into woman_price
+      (woman_price_no, price, discount, discount_rate,
+        sale_price, saved_rate, delivery_charge
+      <if test="sale_start_date != null">
+      , sale_start_date
+      </if>
+      <if test="sale_end_date != null">
+      , sale_end_date
+      </if>
+      , woman_no)
+    values
+      (woman_price_seq.nextval, #{price},
+      #{discount,jdbcType=INTEGER}, #{discount_rate,jdbcType=INTEGER},
+      #{sale_price},
+      #{saved_rate,jdbcType=INTEGER}, #{delivery_charge,jdbcType=INTEGER}
+      <if test="sale_start_date != null">
+        , #{sale_start_date,jdbcType=DATE}
+      </if>
+      <if test="sale_end_date != null">
+        , #{sale_end_date,jdbcType=DATE}
+      </if>  
+      , #{woman_no})
+  </insert>
+
+  <!-- 이미지 등록 -->
+  <insert id="writeImage">
+    insert into woman_image
+      (woman_image_no, woman_image_name, woman_no)
+    values
+      (woman_image_seq.nextval, #{woman_image_name}, #{woman_no})
+  </insert>
+
+  <!-- 상품 사이즈 등록 -->
+  <insert id="writeSize">
+    insert into woman_size
+      (woman_size_no, woman_size_name, woman_no)
+    values
+      (woman_size_seq.nextval, #{woman_size_name}, #{woman_no})
+  </insert>
+
+  <!-- 상품 컬러 등록 (여러 개 컬러 입력) -->
+  <insert id="writeColor">
+    insert into woman_color
+      (woman_color_no, woman_color_name, woman_no)
+    select woman_color_seq.nextval, woman_color_name, woman_no from 
+    (
+    <foreach collection="list" item="vo" separator=" union all ">
+      select #{vo.woman_color_name} woman_color_name, #{vo.woman_no} woman_no from dual
+    </foreach>
+    )
+  </insert>
+
+  <!-- 상품 수정 -->
+  <update id="update">
+    update woman set
+      woman_cate_code1 = #{woman_cate_code1}, woman_cate_code2 = #{woman_cate_code2},
+      woman_cate_name = #{woman_cate_name},
+      woman_name = #{woman_name}, company = #{company},
+      content = #{content}, product_date = #{product_date}
+    where 
+      woman_no = #{woman_no}
+  </update>
+
+  <!-- 상품 가격 수정 -->
+  <update id="updatePrice">
+    update woman_price set
+      price = #{price}, discount = #{discount}, discount_rate = #{discount_rate},
+      sale_price = #{sale_price}, saved_rate = #{saved_rate},
+      delivery_charge = #{delivery_charge},
+      sale_start_date = #{sale_start_date},
+      sale_end_date = #{sale_end_date}
+    where woman_no = #{woman_no}
+  </update>
+
+  <!-- 상품 이미지 수정 -->
+  <update id="updateImage">
+    update woman_image set
+      woman_image_name = #{woman_image_name}
+    where woman_no = #{woman_no}
+  </update>
+
+  <!-- 상품 사이즈 수정 -->
+  <update id="updateSize">
+    update woman_size set
+      woman_size_name = #{woman_size_name}
+    where woman_no = #{woman_no}
+  </update>
+
+  <!-- 상품 컬러 수정 -->
+  <update id="updateColor">
+    update woman_color set
+      woman_color_name = #{woman_color_name}
+    where woman_no = #{woman_no}
+  </update>
+
+  <!-- 상품 삭제 -->
+  <delete id="delete">
+    delete from woman
+    where woman_no = #{woman_no}
+  </delete>
+
+  <!-- 가격 정보 삭제 -->
+  <delete id="deletePrice">
+    delete from woman_price
+    where woman_no = #{woman_no}
+  </delete>
+
+  <!-- 이미지 삭제 -->
+  <delete id="deleteImage">
+    delete from woman_image
+    where woman_no = #{woman_no}
+  </delete>
+
+  <!-- 사이즈 삭제 -->
+  <delete id="deleteSize">
+    delete from woman_size
+    where woman_no = #{woman_no}
+  </delete>
+
+  <!-- 컬러 삭제 -->
+  <delete id="deleteColor">
+    delete from woman_color
+    where woman_no = #{woman_no}
+  </delete>
+</mapper>

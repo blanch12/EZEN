@@ -8,6 +8,23 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- datepicker: jquery는 bootstrap에서 정의한 라이브러리 사용 -->
+<link rel="stylesheet"
+	href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+
+<link rel="stylesheet" href="/resources/styles/reset.css?after">
+<link rel="stylesheet" href="/resources/styles/common.css?after">
+<link rel="stylesheet" href="/resources/styles/root.css?after">
+<link rel="stylesheet" href="/resources/styles/main.css?after">
+<link rel="stylesheet" href="/resources/styles/reponsive.css?after">
+
 <title>회원 리스트</title>
 
 <!-- 4. 우리가 만든 라이브러리 등록 -->
@@ -74,7 +91,7 @@ $(function(){
 </head>
 <body>
 
-<div class="container p-3 my-3">
+<div class="container" style="padding-top: 200px;">
 	<h1><i class="fa fa-align-justify"></i> 회원 리스트</h1>
 	<form action="list.do" id="searchForm">
 		<div class="row">

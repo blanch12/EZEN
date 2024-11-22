@@ -42,6 +42,37 @@
 	  	where rnum between #{pageObject.startRow} and #{pageObject.endRow}
   	</select>
   	
+  	
+  	<select id="selectGoodsByIds" parameterType="map" resultType="org.zerock.goods.vo.GoodsVO">
+	    SELECT 
+	        g.goods_no,
+	        g.goods_name,
+	        g.image_name,
+	        p.sale_price,
+	        p.delivery_charge
+	    FROM 
+	        goods g
+	    JOIN (
+	        SELECT 
+	            goods_no, 
+	            MAX(price) AS price,
+	            MAX(sale_price) AS sale_price, -- SALE_PRICE 추가
+	            MAX(delivery_charge) AS delivery_charge -- DELIVERY_CHARGE 추가
+	        FROM 
+	            goods_price
+	        GROUP BY 
+	            goods_no
+	    ) p 
+	    ON 
+	        g.goods_no = p.goods_no
+	    WHERE 
+	        g.goods_no IN
+	        <foreach item="id" collection="ids" open="(" separator="," close=")">
+	            #{id}
+	        </foreach>
+	</select>
+  	
+  	
   	<!-- 페이지 처리를 위한 getTotalRow -->
   	<select id="getTotalRow" resultType="Long">
   		select count(*)
@@ -266,6 +297,12 @@
 	<delete id="deleteImage">
 		delete from goods_image
 		where image_name = #{image_name}
+	</delete>
+	
+	<!-- 삭제  -->
+		<delete id="delete">
+		delete from goods
+		where goods_no = #{goods_no} 
 	</delete>
   </mapper>
   

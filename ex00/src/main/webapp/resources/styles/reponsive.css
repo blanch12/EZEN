@@ -1,0 +1,223 @@
+@charset "UTF-8";
+
+:root {
+    --light-gray: #F5F5F5;
+    --gray: #E0E0E0;
+    --dark-gray: #222222;
+    --white: #FFFFFF;
+    --white50: #FFFFFF50;
+    --white80: #FFFFFF80;
+    --black: #0A0A0A;
+    --black50: #0A0A0A50;
+    --black80: #0A0A0A80;
+    --black90: #0A0A0A90;
+    --id-color: #A48374;
+    --txt-color-light: #555555;
+    --txt-color-gray: #777777;
+    --font-size-big: 2.6rem;
+    --font-size-xxxl: 2.4rem;
+    --font-size-xxl: 2.2rem;
+    --font-size-xl: 2rem;
+    --font-size-lg: 1.8rem;
+    --font-size-md: 1.6rem;
+    --font-size-sm: 1.4rem;
+    --font-size-xs: 1.2rem;
+    --font-weight-bold: 700;
+    --font-weight-medium: 500;
+    --font-weight-regular: 400;
+    --font-weight-light: 200;
+}
+
+
+/* 노트북 & 태블릿 가로 (해상도 1024px ~ 1279px)*/
+@media all and (min-width: 1024px) and (max-width: 1279px) { 
+    .gnb > ul {
+        gap: 1rem;
+    }
+
+    .gnb > ul li > a {
+        padding: 1rem 1.8rem;
+    }
+} 
+
+/* 태블릿 가로 (해상도 768px ~ 1023px)*/
+@media all and (min-width: 768px) and (max-width: 1023px) { 
+    .header-contents > .gnb {
+        display: none;
+    }
+
+    .header-menuicon {
+        display: block;
+    }
+
+    .header-contents .logo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .product-info {
+        max-width: 150px;
+    }
+
+    .item-title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+} 
+
+/* 모바일 세로 (해상도 ~ 767px)*/ 
+@media all and (max-width: 767px) {
+    .header-contents {
+        display: none;
+    }
+
+    .header-contents__Mobile {
+        display: block;
+    }
+
+    .header-topbanner a {
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-medium);
+    }
+
+    /* .main {
+        transform: translateY(14vh);
+    } */
+    .section.main-banner__visual {
+        height: calc(100vh - 55px);
+    }
+
+    .section:not(.section-no__margin) {
+        margin: 8rem auto;
+    }
+
+    .section-width__limit {
+        padding: 0 2%;
+    }
+
+    .item-title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .section.main-banner__exclusive {
+        height: 60vh;
+    }
+
+    .exclusive-wrap {
+        display: none;
+    }
+
+    .exclusive-wrap__mobile {
+        display: block;
+    }
+
+    .section.main-banner__brands {
+        height: 50vh;
+    }
+
+    .brandshop-content {
+        padding: 3rem 2rem;
+    }
+
+    .brandshop-content .btn-component01 {
+        padding: 1rem 1.8rem;
+        font-size: var(--font-size-sm);
+    }
+
+    .brandshop-content .brandshop-content__txt {
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-light);
+        margin-bottom: 0.45rem;
+    }
+
+    .brandshop-content .brandshop-content__title {
+        font-size: var(--font-size-xl);
+    }
+
+    .main-banner__brands.swiper > .swiper-button-prev {
+        left: 7%;
+        width: 40px;
+        height: 40px;
+    }
+
+    .main-banner__brands.swiper > .swiper-button-next {
+        right: 7%;
+        width: 40px;
+        height: 40px;
+    }
+
+    .section.main-banner__event {
+        height: 50vh;
+        max-height: none;
+    }
+
+    .event-banner__wrap {
+        height: 100%;
+        flex-direction: column;
+    }
+
+    .event-banner__wrap a {
+        width: 100%;
+        height: 100%;
+    }
+
+    .event-banner__wrap a img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .section.main-banner__event .main-event__innertxt {
+        font-size: var(--font-size-md);
+        font-weight: var(--font-weight-light);
+    }
+
+    .main-event__innertxt.welcome-event {
+        left: 5%;
+    }
+
+    .main-event__innertxt.welcome-event p > strong {
+        font-size: var(--font-size-lg);
+        display: block;
+        margin: 0.25rem 0;
+    }
+
+    .bestreview-item {
+        background-color: var(--white);
+        padding: 1.1rem;
+    }
+
+    .product-thumbnali__sm {
+        width: 45px;
+        height: 45px;
+    }
+
+    .product-info.review-product__txt {
+        max-width: 140px;
+    }
+
+    .review-product__link .go-link {
+        width: 15px;
+        height: 15px;
+    }
+
+    .footer {
+        padding: 4rem 1.8rem;
+    }
+
+    .footer-wrap {
+        display: none;
+    }
+
+    .footer-wrap__mobile {
+        display: block;
+    }
+
+    .navbar-only__mobile {
+        display: block;
+    }
+}

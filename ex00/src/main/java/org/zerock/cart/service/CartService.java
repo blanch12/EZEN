@@ -30,24 +30,4 @@ public interface CartService {
 }
 	
 	
-//	// 2. 장바구니 보기
-//		public GoodsVO view(Long no, int inc);
-//	
-	// 3. 장바구니 추가
-//		public void addItemToCart(CartVO cartItem) {
-//	        // 동일한 상품이 장바구니에 이미 있으면 수량만 증가시킨다.
-//	        for (CartVO existingItem : cartList) {
-//	            if (existingItem.getGoods_no().equals(cartItem.getGoods_no())) {
-//	                existingItem.setQuantity(existingItem.getQuantity() + cartItem.getQuantity());
-//	                return;
-//	            }
-//	        }
-//	        // 상품이 없으면 새로 추가
-//	        cartList.add(cartItem);
-//	    }
-//		
-//	// 4.장바구니에서 상품 삭제
-//	    public void removeItemFromCart(Long goods_no) {
-//	    	cartList.removeIf(item -> item.getGoods_no().equals(goods_no));
-//	    }
 

@@ -4,11 +4,28 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- datepicker: jquery는 bootstrap에서 정의한 라이브러리 사용 -->
+<link rel="stylesheet"
+	href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+
+<link rel="stylesheet" href="/resources/styles/reset.css?after">
+<link rel="stylesheet" href="/resources/styles/common.css?after">
+<link rel="stylesheet" href="/resources/styles/root.css?after">
+<link rel="stylesheet" href="/resources/styles/main.css?after">
+<link rel="stylesheet" href="/resources/styles/reponsive.css?after">
+<link rel="stylesheet" href="/resources/styles/brand_list.css?after">
 <title>일반 게시판 글쓰기</title>
 <jsp:include page="../jsp/webLib.jsp"></jsp:include>
 </head>
 <body>
-<div class="container">
+<div class="container" style="padding-top:100px;">
 	<h2>일반 게시판 글쓰기</h2>
 	<form action="write.do" method="post">
 		<div class="form-group">

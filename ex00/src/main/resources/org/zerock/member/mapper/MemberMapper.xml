@@ -2,105 +2,141 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  <mapper namespace="org.zerock.member.mapper.MemberMapper">
-  <!-- 로그인 -->
+<mapper namespace="org.zerock.member.mapper.MemberMapper">
+
+
+  <!-- 일반 로그인 -->
   <select id="login" resultType="org.zerock.member.vo.LoginVO">
-  	select
-  		m.id, m.pw, m.name, m.photo, m.newMsgCnt, m.gradeNo, g.gradeName
-  	from member m, grade g
-  	where
-  		<!-- 일반조건 -->
-  		(id = #{id} and pw = #{pw})
-  		and
-  		<!-- 조인조건 -->
-  		(m.gradeNo = g.gradeNo)
+      select
+          m.id, m.pw, m.name, m.photo, m.gradeNo, g.gradeName
+      from member m, grade g
+      where
+          (id = #{id} and pw = #{pw})
+          and
+          (m.gradeNo = g.gradeNo)
+  </select>
+  
+	  <!-- 회원 정보 업데이트 -->
+    <update id="updateMember" parameterType="org.zerock.member.vo.LoginVO">
+        UPDATE member
+        SET name = #{name},
+            gender = #{gender},
+            birth = #{birth},
+            tel = #{tel},
+            email = #{email}
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteMember" parameterType="string">
+	    DELETE FROM member WHERE id = #{id}
+	</delete>
+
+    <!-- ID로 비밀번호 조회 -->
+    <select id="getPasswordById" parameterType="String" resultType="String">
+        SELECT pw FROM member WHERE id = #{id}
+    </select>
+
+  <!-- 카카오 사용자 조회 -->
+  <select id="findByKakaoId" resultType="org.zerock.member.vo.LoginVO">
+      select * from member
+      where id = #{kakaoId} and loginType = 'kakao'
   </select>
 
-	<insert id="write">
-	 insert into member(id, pw, name, gender, email, birth, tel)
-	 values (#{id}, #{pw}, #{name}, #{gender}, #{email}, #{birth}, #{tel})
+ 	 <!-- 새로운 카카오 사용자 저장 -->
+	<insert id="insertKakaoUser">
+	    insert into member(id, pw, name, email, gender, birth, loginType)
+	    values (#{id}, '1111', #{name}, #{email, jdbcType=VARCHAR}, 'U', TO_DATE('1900-01-01', 'YYYY-MM-DD'), 'kakao')
 	</insert>
 	
-	<select id="list" resultType="org.zerock.member.vo.LoginVO">
-	    select id, name, birth, tel, gradeNo, gradeName, status 
-	    from (
-	        select rownum rnum, id, name, birth, tel, gradeNo, gradeName, status 
-	        from (
-	            select m.id, m.name, m.birth, m.tel, m.gradeNo, g.gradeName, m.status 
-	            from member m, grade g 
-	            where m.gradeNo = g.gradeNo 
-	            order by id asc
-	        )
-	    )
-	    where rnum between #{startRow} and #{endRow}
-	</select>
-	
-	<select id="getTotalRow" resultType="Long">
-  		select count(*)
-  		from member
-  		<!-- 검색을 달아야 한다. -->
-  		<include refid="search"></include>
-  	</select>
-  	<sql id="search">
-  	<!-- 검색어가 없거나 null일때 동작하지 않도록 처리 -->
-  	<if test="word != null and word != ''.toString()">
-  		<!-- trim안의 쿼리문 작성후 제일앞에 where 붙이고 where 다음에 나오는 or는 제거합니다. -->
-		<trim prefix="where" prefixOverrides="or">
-			 <!-- t(제목) 이 있으면 -->
-			<if test="key.indexOf('t') >= 0">
-				<!-- '%' || #{word} || '%' => 하나의 문자열로 만들어 줍니다.(oracle) -->
-				or title like '%' || #{word} || '%' 
-			</if>
-			<if test="key.indexOf('c') >= 0">
-				or content like '%' || #{word} || '%'
-			</if>
-			<if test="key.indexOf('w') >= 0">
-				or writer like '%' || #{word} || '%'
-			</if>
-		</trim> 
-	</if> 	
-  	</sql>
-  	
-  	<select id="view" resultType="org.zerock.member.vo.LoginVO">
-  		select m.id, m.pw, m.name, m.gender,
-		m.birth, m.tel, m.email,
-		m.regDate,
-		m.conDate,
-		m.gradeNo, g.gradeName, m.status
-		from member m, grade g
-		where (id = #{id}) and (m.gradeNo = g.gradeNo)
-  	</select>
-  	<update id="update">
+	<!-- 네이버 사용자 조회 -->
+    <select id="findByNaverId" resultType="org.zerock.member.vo.LoginVO">
+        SELECT * FROM member
+        WHERE id = #{naverId} AND loginType = 'naver'
+    </select>
+
+    <!-- 새로운 네이버 사용자 저장 -->
+    <insert id="insertNaverUser">
+        INSERT INTO member (id, pw, name, email, gender, birth, loginType)
+        VALUES (#{id}, '1111', #{name}, #{email}, 'U', TO_DATE('1900-01-01', 'YYYY-MM-DD'), 'naver')
+    </insert>
+
+  <insert id="write">
+      insert into member(id, pw, name, gender, email, birth, tel)
+      values (#{id}, #{pw}, #{name}, #{gender}, #{email}, #{birth}, #{tel})
+  </insert>
+  
+  <select id="list" resultType="org.zerock.member.vo.LoginVO">
+      select id, name, birth, tel, gradeNo, gradeName, status 
+      from (
+          select rownum rnum, id, name, birth, tel, gradeNo, gradeName, status 
+          from (
+              select m.id, m.name, m.birth, m.tel, m.gradeNo, g.gradeName, m.status 
+              from member m, grade g 
+              where m.gradeNo = g.gradeNo 
+              order by id asc
+          )
+      )
+      where rnum between #{startRow} and #{endRow}
+  </select>
+  
+  <select id="getTotalRow" resultType="Long">
+      select count(*)
+      from member
+      <include refid="search"></include>
+  </select>
+  
+  <sql id="search">
+      <if test="word != null and word != ''.toString()">
+          <trim prefix="where" prefixOverrides="or">
+              <if test="key.indexOf('t') >= 0">
+                  or title like '%' || #{word} || '%' 
+              </if>
+              <if test="key.indexOf('c') >= 0">
+                  or content like '%' || #{word} || '%'
+              </if>
+              <if test="key.indexOf('w') >= 0">
+                  or writer like '%' || #{word} || '%'
+              </if>
+          </trim> 
+      </if>   
+  </sql>
+  
+  <select id="view" resultType="org.zerock.member.vo.LoginVO">
+      select m.id, m.pw, m.name, m.gender,
+      m.birth, m.tel, m.email,
+      m.regDate,
+      m.conDate,
+      m.gradeNo, g.gradeName, m.status
+      from member m, grade g
+      where (id = #{id}) and (m.gradeNo = g.gradeNo)
+  </select>
+  
+  <update id="changeStatus">
+      update member
+      set status = #{status} where id = #{id}
+  </update>
+  
+  <update id="changeGradeNo">
+      update member
+      set gradeNo = #{gradeNo} where id = #{id}
+  </update>
+  
+    <update id="update">
   		update member
   		set name = #{name}, gender = #{gender}, birth = #{birth},
   		tel = #{tel}, email = #{email}
   		where (id = #{id}) and (pw = #{pw})
   	</update>
-  	
+  
   	<update id="delete">
   		update member
   		set status = '탈퇴'
   		where id = #{id} and pw = #{pw}
   	</update>
   	
-  	<update id="changeStatus">
-  	update member
-	set status = #{status} where id = #{id}
-  	</update>
-  	
-  	<update id="changeGradeNo">
-  	update member
-	set gradeNo = #{gradeNo} where id = #{id}
-  	</update>
-  	
   	<update id="conUpdate">
   	update member
 	set conDate = sysDate where id = #{id}
   	</update>
-  </mapper>
-  
-  
-  
-  
-  
-  
+
+</mapper>

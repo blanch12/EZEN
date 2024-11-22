@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.category.mapper.CategoryMapper">
+  
+  <!-- 카테고리 리스트 쿼리 -->
+  <select id="list" resultType="org.zerock.category.vo.CategoryVO">
+    <!-- 카테고리의 대분류, 중분류를 조회 -->
+    select cate_code1, cate_code2, cate_name
+    from category
+    <trim prefix="where">
+    
+      <!-- 대분류만 가져오는 조건 -->
+      <if test="cate_code1 == 0">
+        cate_code2 = 0
+      </if>
+      
+      <!-- 중분류를 가져오는 조건, cate_code1이 0보다 큰 경우에만 -->
+      <if test="cate_code1 > 0">
+        cate_code2 > 0 and cate_code1 = #{cate_code1}
+      </if>
+      
+    </trim>
+    <!-- 대분류, 중분류 순으로 정렬 -->
+    order by cate_code1, cate_code2
+  </select>
+  
+  <!-- 카테고리 등록 -->
+  <!-- 대분류 카테고리 등록 -->
+  <insert id="writeBig">
+    <!-- cate_code1은 현재 카테고리 중 가장 큰 값에 1을 더한 값으로 설정 -->
+    insert into category(cate_code1, cate_name)
+    values(
+      (select NVL(max(cate_code1),0) + 1 from category),
+      #{cate_name}
+    )
+  </insert>
+
+  <!-- 중분류 카테고리 등록 -->
+  <insert id="writeMid">
+    <!-- cate_code2는 해당 대분류 내에서 가장 큰 값에 1을 더한 값으로 설정 -->
+    insert into category(cate_code1, cate_code2, cate_name)
+    values(
+      #{cate_code1},
+      (select NVL(max(cate_code2),0) + 1
+        from category where cate_code1 = #{cate_code1}),
+      #{cate_name}
+    )
+  </insert>
+  
+  <!-- 카테고리 수정 -->
+  <update id="update">
+    <!-- cate_code1과 cate_code2에 해당하는 카테고리 이름을 수정 -->
+    update category
+    set cate_name = #{cate_name}
+    where cate_code1 = #{cate_code1}
+      and cate_code2 = #{cate_code2}
+  </update>
+  
+  <!-- 카테고리 삭제 -->
+  <delete id="delete">
+    <!-- 대분류만 삭제하는 경우 -->
+    delete from category
+    where cate_code1 = #{cate_code1}
+    
+    <!-- 중분류가 있을 경우 중분류도 함께 삭제 -->
+    <if test="cate_code2 != 0">
+      and cate_code2 = #{cate_code2}
+    </if>
+  </delete>
+
+</mapper>
